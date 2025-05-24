@@ -37,14 +37,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imran-codes/react-component-library.git"
+    "url": "git+https://github.com/shibilbasith/infinite-ui.git"
   },
   "author": "Shibil",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/imran-codes/react-component-library/issues"
+    "url": "https://github.com/shibilbasith/infinite-ui/issues"
   },
-  "homepage": "https://github.com/imran-codes/react-component-library#readme",
+  "homepage": "https://github.com/shibilbasith/infinite-ui#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
