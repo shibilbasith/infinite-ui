@@ -1,9 +1,9 @@
 import React$1 from 'react';
 
-type PageProps = {
+interface PageProps {
     title: string;
     children: React.ReactNode;
-};
+}
 
 declare const Page: React$1.FC<PageProps>;
 
