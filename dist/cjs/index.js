@@ -934,5 +934,46 @@ const Page = ({ title, children }) => {
     return (jsxRuntime.jsxs(Container, { "data-testid": "page-container", children: [jsxRuntime.jsx("h1", { children: title }), children] }));
 };
 
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ".btn {\n  font-family: inherit;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease-in-out;\n  outline: none;\n  border: 2px solid;\n  text-decoration: none;\n  display: inline-block;\n  text-align: center;\n}\n\n/* Variants */\n.btn--primary {\n  background-color: #007bff;\n  color: white;\n  border-color: #007bff;\n}\n\n.btn--primary:hover:not(:disabled) {\n  background-color: #0056b3;\n  border-color: #0056b3;\n}\n\n.btn--secondary {\n  background-color: #6c757d;\n  color: white;\n  border-color: #6c757d;\n}\n\n.btn--secondary:hover:not(:disabled) {\n  background-color: #545b62;\n  border-color: #545b62;\n}\n\n.btn--danger {\n  background-color: #dc3545;\n  color: white;\n  border-color: #dc3545;\n}\n\n.btn--danger:hover:not(:disabled) {\n  background-color: #c82333;\n  border-color: #c82333;\n}\n\n.btn--outline {\n  background-color: transparent;\n  color: #007bff;\n  border-color: #007bff;\n}\n\n.btn--outline:hover:not(:disabled) {\n  background-color: #007bff;\n  color: white;\n}\n\n/* Sizes */\n.btn--small {\n  padding: 0.25rem 0.5rem;\n  font-size: 0.875rem;\n  border-radius: 0.25rem;\n}\n\n.btn--medium {\n  padding: 0.5rem 1rem;\n  font-size: 1rem;\n  border-radius: 0.375rem;\n}\n\n.btn--large {\n  padding: 0.75rem 1.5rem;\n  font-size: 1.125rem;\n  border-radius: 0.5rem;\n}\n\n/* States */\n.btn:disabled {\n  opacity: 0.6;\n  cursor: not-allowed;\n}\n\n.btn:focus {\n  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);\n}\n\n.btn:active:not(:disabled) {\n  transform: translateY(1px);\n}";
+styleInject(css_248z);
+
+const Button = ({ children, variant = 'primary', size = 'medium', disabled = false, onClick, type = 'button', className = '', ...props }) => {
+    const buttonClasses = [
+        'btn',
+        `btn--${variant}`,
+        `btn--${size}`,
+        className
+    ].filter(Boolean).join(' ');
+    return (jsxRuntime.jsx("button", { className: buttonClasses, disabled: disabled, onClick: onClick, type: type, "data-testid": "reusable-button", ...props, children: children }));
+};
+
+exports.Button = Button;
 exports.Page = Page;
 //# sourceMappingURL=index.js.map
