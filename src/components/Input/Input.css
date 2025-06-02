@@ -1,0 +1,230 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.input__label {
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.input__required {
+  color: #dc3545;
+  margin-left: 0.125rem;
+}
+
+.input__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid;
+  border-radius: 0.375rem;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.input {
+  width: 100%;
+  font-family: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #374151;
+  transition: all 0.2s ease-in-out;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.input__left-icon,
+.input__right-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.input__prefix,
+.input__suffix {
+  font-family: inherit;
+  color: #6b7280;
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.input__suffix {
+  border-right: none;
+  border-left: 1px solid #e5e7eb;
+}
+
+.input__helper-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.input__error-text {
+  font-size: 0.75rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+/* Sizes */
+.input-container--small .input {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.input-container--small .input__wrapper {
+  border-radius: 0.25rem;
+}
+
+.input-container--small .input__left-icon,
+.input-container--small .input__right-icon {
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+}
+
+.input-container--small .input__prefix,
+.input-container--small .input__suffix {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.input-container--medium .input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.input-container--medium .input__wrapper {
+  border-radius: 0.375rem;
+}
+
+.input-container--medium .input__left-icon,
+.input-container--medium .input__right-icon {
+  padding: 0 0.75rem;
+  font-size: 1rem;
+}
+
+.input-container--medium .input__prefix,
+.input-container--medium .input__suffix {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.input-container--large .input {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.125rem;
+}
+
+.input-container--large .input__wrapper {
+  border-radius: 0.5rem;
+}
+
+.input-container--large .input__left-icon,
+.input-container--large .input__right-icon {
+  padding: 0 1rem;
+  font-size: 1.125rem;
+}
+
+.input-container--large .input__prefix,
+.input-container--large .input__suffix {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.125rem;
+}
+
+/* Variants - Default */
+.input-container--default .input__wrapper {
+  border-color: #d1d5db;
+  background-color: white;
+}
+
+.input-container--default .input__wrapper:hover:not(.input-container--disabled .input__wrapper) {
+  border-color: #9ca3af;
+}
+
+.input-container--default .input__wrapper:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Variants - Success */
+.input-container--success .input__wrapper {
+  border-color: #28a745;
+}
+
+.input-container--success .input__wrapper:focus-within {
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* Variants - Warning */
+.input-container--warning .input__wrapper {
+  border-color: #ffc107;
+}
+
+.input-container--warning .input__wrapper:focus-within {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+}
+
+/* Variants - Error */
+.input-container--error .input__wrapper {
+  border-color: #dc3545;
+}
+
+.input-container--error .input__wrapper:focus-within {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* States */
+.input-container--disabled .input__wrapper {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.input-container--disabled .input {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.input-container--disabled .input__label {
+  color: #9ca3af;
+}
+
+.input-container--readonly .input__wrapper {
+  background-color: #f9fafb;
+}
+
+.input-container--readonly .input {
+  cursor: default;
+}
+
+/* Icon adjustments */
+.input-container--with-left-icon .input {
+  padding-left: 0;
+}
+
+.input-container--with-right-icon .input {
+  padding-right: 0;
+}
+
+.input-container--with-prefix .input {
+  padding-left: 0;
+}
+
+.input-container--with-suffix .input {
+  padding-right: 0;
+}

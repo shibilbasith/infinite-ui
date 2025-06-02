@@ -2,22 +2,22 @@ import React from "react";
 import { type ButtonProps } from "./types";
 import "./Button.css";
 
-const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  variant = 'primary',
-  size = 'medium',
+const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = "primary",
+  size = "medium",
   disabled = false,
   onClick,
-  type = 'button',
-  className = '',
-  ...props 
+  type = "button",
+  className = "",
+  ...props
 }) => {
   const buttonClasses = [
-    'btn',
-    `btn--${variant}`,
-    `btn--${size}`,
+    "infinite-btn",
+    `infinite-btn--${variant}`,
+    `infinite-btn--${size}`,
     className
-  ].filter(Boolean).join(' ');
+  ].filter(Boolean).join(" ");
 
   return (
     <button

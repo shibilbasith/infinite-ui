@@ -1,2 +1,15 @@
-export { default as Page } from "./components/Page";
 export { default as Button } from "./components/Button";
+export { default as Checkbox } from "./components/Checkbox";
+export { default as Input } from "./components/Input";
+export { default as Switch } from "./components/Switch";
+export { default as Select } from "./components/Select";
+export { default as RadioGroup } from "./components/Radio";
+export { default as Tab } from "./components/Tab";
+export { default as Tooltip } from "./components/Tooltip";
+export { default as Segmented } from "./components/Segmented";
+export { default as Alert } from "./components/Alert";
+export { default as Accordion } from "./components/Accordion";
+export { default as Badge } from "./components/Badge";
+export { default as Slider } from "./components/Slider";
+export { default as Popover } from "./components/Popover";
+export { default as Modal } from "./components/Modal";

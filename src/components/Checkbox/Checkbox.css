@@ -1,0 +1,198 @@
+.infinite-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.infinite-checkbox {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+.infinite-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Sizes */
+.infinite-checkbox--small {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 0.2rem;
+}
+
+.infinite-checkbox--medium {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+}
+
+.infinite-checkbox--large {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.3rem;
+}
+
+/* Variants - Unchecked States */
+.infinite-checkbox--primary {
+  border-color: #d1d5db;
+}
+
+.infinite-checkbox--secondary {
+  border-color: #9ca3af;
+}
+
+.infinite-checkbox--success {
+  border-color: #10b981;
+}
+
+.infinite-checkbox--danger {
+  border-color: #ef4444;
+}
+
+/* Checked States */
+.infinite-checkbox--primary:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.infinite-checkbox--secondary:checked {
+  background-color: #6b7280;
+  border-color: #6b7280;
+}
+
+.infinite-checkbox--success:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.infinite-checkbox--danger:checked {
+  background-color: #ef4444;
+  border-color: #ef4444;
+}
+
+/* Checkmark */
+.infinite-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 0.25rem;
+  height: 0.5rem;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+}
+
+.infinite-checkbox--small:checked::after {
+  width: 0.2rem;
+  height: 0.4rem;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.infinite-checkbox--large:checked::after {
+  width: 0.3rem;
+  height: 0.6rem;
+  border-width: 0 2.5px 2.5px 0;
+}
+
+/* Indeterminate State */
+.infinite-checkbox--indeterminate {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.infinite-checkbox--indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.5rem;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
+}
+
+.infinite-checkbox--small.infinite-checkbox--indeterminate::after {
+  width: 0.4rem;
+  height: 1.5px;
+}
+
+.infinite-checkbox--large.infinite-checkbox--indeterminate::after {
+  width: 0.6rem;
+  height: 2.5px;
+}
+
+/* Disabled State */
+.infinite-checkbox--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.infinite-checkbox--disabled:checked {
+  background-color: #9ca3af;
+  border-color: #9ca3af;
+}
+
+/* Hover States */
+.infinite-checkbox:not(:disabled):hover {
+  border-color: #3b82f6;
+}
+
+.infinite-checkbox--secondary:not(:disabled):hover {
+  border-color: #6b7280;
+}
+
+.infinite-checkbox--success:not(:disabled):hover {
+  border-color: #059669;
+}
+
+.infinite-checkbox--danger:not(:disabled):hover {
+  border-color: #dc2626;
+}
+
+/* Label Styles */
+.infinite-checkbox__label {
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.infinite-checkbox__label--small {
+  font-size: 0.75rem;
+}
+
+.infinite-checkbox__label--medium {
+  font-size: 0.875rem;
+}
+
+.infinite-checkbox__label--large {
+  font-size: 1rem;
+}
+
+.infinite-checkbox__label--disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.infinite-checkbox__required {
+  color: #ef4444;
+  margin-left: 0.125rem;
+}
+
+/* Wrapper disabled state */
+.infinite-checkbox-wrapper:has(.infinite-checkbox--disabled) {
+  cursor: not-allowed;
+}

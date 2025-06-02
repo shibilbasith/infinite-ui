@@ -1,0 +1,53 @@
+.custom-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.custom-switch.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.custom-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-switch-slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.custom-switch-slider::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.custom-switch-input:checked + .custom-switch-slider {
+  background-color: #4f46e5; /* Indigo */
+}
+
+.custom-switch-input:checked + .custom-switch-slider::before {
+  transform: translateX(20px);
+}
+
+.custom-switch-label {
+  font-size: 14px;
+}

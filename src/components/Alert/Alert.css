@@ -1,0 +1,35 @@
+/* Base styles */
+.infinite-alert {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 0;
+  color: #000000;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Success */
+.infinite-alert-success {
+  background-color: #e7f8eb;
+  border: 1px solid #3ac259;
+}
+
+/* Error */
+.infinite-alert-error {
+  background-color: #ffeceb;
+  border: 1px solid #ff7e74;
+}
+
+/* Warning */
+.infinite-alert-warning {
+  background-color: #fff8e1;
+  border: 1px solid #ffc107;
+}
+
+/* Info */
+.infinite-alert-info {
+  background-color: #e7fcff;
+  border: 1px solid #17a2b8;
+}

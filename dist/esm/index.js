@@ -1,942 +1,11 @@
-import { jsxs, jsx } from 'react/jsx-runtime';
-import o, { useDebugValue, createElement, useRef, useContext } from 'react';
-
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
-
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-}
-
-typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
-
-function memoize(fn) {
-  var cache = Object.create(null);
-  return function (arg) {
-    if (cache[arg] === undefined) cache[arg] = fn(arg);
-    return cache[arg];
-  };
-}
-
-var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
-
-var isPropValid = /* #__PURE__ */memoize(function (prop) {
-  return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
-  /* o */
-  && prop.charCodeAt(1) === 110
-  /* n */
-  && prop.charCodeAt(2) < 91;
-}
-/* Z+1 */
-);
-
-var MS = '-ms-';
-var MOZ = '-moz-';
-var WEBKIT = '-webkit-';
-
-var COMMENT = 'comm';
-var RULESET = 'rule';
-var DECLARATION = 'decl';
-var IMPORT = '@import';
-var KEYFRAMES = '@keyframes';
-var LAYER = '@layer';
-
-/**
- * @param {number}
- * @return {number}
- */
-var abs = Math.abs;
-
-/**
- * @param {number}
- * @return {string}
- */
-var from = String.fromCharCode;
-
-/**
- * @param {object}
- * @return {object}
- */
-var assign = Object.assign;
-
-/**
- * @param {string} value
- * @param {number} length
- * @return {number}
- */
-function hash (value, length) {
-	return charat(value, 0) ^ 45 ? (((((((length << 2) ^ charat(value, 0)) << 2) ^ charat(value, 1)) << 2) ^ charat(value, 2)) << 2) ^ charat(value, 3) : 0
-}
-
-/**
- * @param {string} value
- * @return {string}
- */
-function trim (value) {
-	return value.trim()
-}
-
-/**
- * @param {string} value
- * @param {RegExp} pattern
- * @return {string?}
- */
-function match (value, pattern) {
-	return (value = pattern.exec(value)) ? value[0] : value
-}
-
-/**
- * @param {string} value
- * @param {(string|RegExp)} pattern
- * @param {string} replacement
- * @return {string}
- */
-function replace (value, pattern, replacement) {
-	return value.replace(pattern, replacement)
-}
-
-/**
- * @param {string} value
- * @param {string} search
- * @param {number} position
- * @return {number}
- */
-function indexof (value, search, position) {
-	return value.indexOf(search, position)
-}
-
-/**
- * @param {string} value
- * @param {number} index
- * @return {number}
- */
-function charat (value, index) {
-	return value.charCodeAt(index) | 0
-}
-
-/**
- * @param {string} value
- * @param {number} begin
- * @param {number} end
- * @return {string}
- */
-function substr (value, begin, end) {
-	return value.slice(begin, end)
-}
-
-/**
- * @param {string} value
- * @return {number}
- */
-function strlen (value) {
-	return value.length
-}
-
-/**
- * @param {any[]} value
- * @return {number}
- */
-function sizeof (value) {
-	return value.length
-}
-
-/**
- * @param {any} value
- * @param {any[]} array
- * @return {any}
- */
-function append (value, array) {
-	return array.push(value), value
-}
-
-/**
- * @param {string[]} array
- * @param {function} callback
- * @return {string}
- */
-function combine (array, callback) {
-	return array.map(callback).join('')
-}
-
-/**
- * @param {string[]} array
- * @param {RegExp} pattern
- * @return {string[]}
- */
-function filter (array, pattern) {
-	return array.filter(function (value) { return !match(value, pattern) })
-}
-
-var line = 1;
-var column = 1;
-var length = 0;
-var position = 0;
-var character = 0;
-var characters = '';
-
-/**
- * @param {string} value
- * @param {object | null} root
- * @param {object | null} parent
- * @param {string} type
- * @param {string[] | string} props
- * @param {object[] | string} children
- * @param {object[]} siblings
- * @param {number} length
- */
-function node (value, root, parent, type, props, children, length, siblings) {
-	return {value: value, root: root, parent: parent, type: type, props: props, children: children, line: line, column: column, length: length, return: '', siblings: siblings}
-}
-
-/**
- * @param {object} root
- * @param {object} props
- * @return {object}
- */
-function copy (root, props) {
-	return assign(node('', null, null, '', null, null, 0, root.siblings), root, {length: -root.length}, props)
-}
-
-/**
- * @param {object} root
- */
-function lift (root) {
-	while (root.root)
-		root = copy(root.root, {children: [root]});
-
-	append(root, root.siblings);
-}
-
-/**
- * @return {number}
- */
-function char () {
-	return character
-}
-
-/**
- * @return {number}
- */
-function prev () {
-	character = position > 0 ? charat(characters, --position) : 0;
-
-	if (column--, character === 10)
-		column = 1, line--;
-
-	return character
-}
-
-/**
- * @return {number}
- */
-function next () {
-	character = position < length ? charat(characters, position++) : 0;
-
-	if (column++, character === 10)
-		column = 1, line++;
-
-	return character
-}
-
-/**
- * @return {number}
- */
-function peek () {
-	return charat(characters, position)
-}
-
-/**
- * @return {number}
- */
-function caret () {
-	return position
-}
-
-/**
- * @param {number} begin
- * @param {number} end
- * @return {string}
- */
-function slice (begin, end) {
-	return substr(characters, begin, end)
-}
-
-/**
- * @param {number} type
- * @return {number}
- */
-function token (type) {
-	switch (type) {
-		// \0 \t \n \r \s whitespace token
-		case 0: case 9: case 10: case 13: case 32:
-			return 5
-		// ! + , / > @ ~ isolate token
-		case 33: case 43: case 44: case 47: case 62: case 64: case 126:
-		// ; { } breakpoint token
-		case 59: case 123: case 125:
-			return 4
-		// : accompanied token
-		case 58:
-			return 3
-		// " ' ( [ opening delimit token
-		case 34: case 39: case 40: case 91:
-			return 2
-		// ) ] closing delimit token
-		case 41: case 93:
-			return 1
-	}
-
-	return 0
-}
-
-/**
- * @param {string} value
- * @return {any[]}
- */
-function alloc (value) {
-	return line = column = 1, length = strlen(characters = value), position = 0, []
-}
-
-/**
- * @param {any} value
- * @return {any}
- */
-function dealloc (value) {
-	return characters = '', value
-}
-
-/**
- * @param {number} type
- * @return {string}
- */
-function delimit (type) {
-	return trim(slice(position - 1, delimiter(type === 91 ? type + 2 : type === 40 ? type + 1 : type)))
-}
-
-/**
- * @param {number} type
- * @return {string}
- */
-function whitespace (type) {
-	while (character = peek())
-		if (character < 33)
-			next();
-		else
-			break
-
-	return token(type) > 2 || token(character) > 3 ? '' : ' '
-}
-
-/**
- * @param {number} index
- * @param {number} count
- * @return {string}
- */
-function escaping (index, count) {
-	while (--count && next())
-		// not 0-9 A-F a-f
-		if (character < 48 || character > 102 || (character > 57 && character < 65) || (character > 70 && character < 97))
-			break
-
-	return slice(index, caret() + (count < 6 && peek() == 32 && next() == 32))
-}
-
-/**
- * @param {number} type
- * @return {number}
- */
-function delimiter (type) {
-	while (next())
-		switch (character) {
-			// ] ) " '
-			case type:
-				return position
-			// " '
-			case 34: case 39:
-				if (type !== 34 && type !== 39)
-					delimiter(character);
-				break
-			// (
-			case 40:
-				if (type === 41)
-					delimiter(type);
-				break
-			// \
-			case 92:
-				next();
-				break
-		}
-
-	return position
-}
-
-/**
- * @param {number} type
- * @param {number} index
- * @return {number}
- */
-function commenter (type, index) {
-	while (next())
-		// //
-		if (type + character === 47 + 10)
-			break
-		// /*
-		else if (type + character === 42 + 42 && peek() === 47)
-			break
-
-	return '/*' + slice(index, position - 1) + '*' + from(type === 47 ? type : next())
-}
-
-/**
- * @param {number} index
- * @return {string}
- */
-function identifier (index) {
-	while (!token(peek()))
-		next();
-
-	return slice(index, position)
-}
-
-/**
- * @param {string} value
- * @return {object[]}
- */
-function compile (value) {
-	return dealloc(parse('', null, null, null, [''], value = alloc(value), 0, [0], value))
-}
-
-/**
- * @param {string} value
- * @param {object} root
- * @param {object?} parent
- * @param {string[]} rule
- * @param {string[]} rules
- * @param {string[]} rulesets
- * @param {number[]} pseudo
- * @param {number[]} points
- * @param {string[]} declarations
- * @return {object}
- */
-function parse (value, root, parent, rule, rules, rulesets, pseudo, points, declarations) {
-	var index = 0;
-	var offset = 0;
-	var length = pseudo;
-	var atrule = 0;
-	var property = 0;
-	var previous = 0;
-	var variable = 1;
-	var scanning = 1;
-	var ampersand = 1;
-	var character = 0;
-	var type = '';
-	var props = rules;
-	var children = rulesets;
-	var reference = rule;
-	var characters = type;
-
-	while (scanning)
-		switch (previous = character, character = next()) {
-			// (
-			case 40:
-				if (previous != 108 && charat(characters, length - 1) == 58) {
-					if (indexof(characters += replace(delimit(character), '&', '&\f'), '&\f', abs(index ? points[index - 1] : 0)) != -1)
-						ampersand = -1;
-					break
-				}
-			// " ' [
-			case 34: case 39: case 91:
-				characters += delimit(character);
-				break
-			// \t \n \r \s
-			case 9: case 10: case 13: case 32:
-				characters += whitespace(previous);
-				break
-			// \
-			case 92:
-				characters += escaping(caret() - 1, 7);
-				continue
-			// /
-			case 47:
-				switch (peek()) {
-					case 42: case 47:
-						append(comment(commenter(next(), caret()), root, parent, declarations), declarations);
-						break
-					default:
-						characters += '/';
-				}
-				break
-			// {
-			case 123 * variable:
-				points[index++] = strlen(characters) * ampersand;
-			// } ; \0
-			case 125 * variable: case 59: case 0:
-				switch (character) {
-					// \0 }
-					case 0: case 125: scanning = 0;
-					// ;
-					case 59 + offset: if (ampersand == -1) characters = replace(characters, /\f/g, '');
-						if (property > 0 && (strlen(characters) - length))
-							append(property > 32 ? declaration(characters + ';', rule, parent, length - 1, declarations) : declaration(replace(characters, ' ', '') + ';', rule, parent, length - 2, declarations), declarations);
-						break
-					// @ ;
-					case 59: characters += ';';
-					// { rule/at-rule
-					default:
-						append(reference = ruleset(characters, root, parent, index, offset, rules, points, type, props = [], children = [], length, rulesets), rulesets);
-
-						if (character === 123)
-							if (offset === 0)
-								parse(characters, root, reference, reference, props, rulesets, length, points, children);
-							else
-								switch (atrule === 99 && charat(characters, 3) === 110 ? 100 : atrule) {
-									// d l m s
-									case 100: case 108: case 109: case 115:
-										parse(value, reference, reference, rule && append(ruleset(value, reference, reference, 0, 0, rules, points, type, rules, props = [], length, children), children), rules, children, length, points, rule ? props : children);
-										break
-									default:
-										parse(characters, reference, reference, reference, [''], children, 0, points, children);
-								}
-				}
-
-				index = offset = property = 0, variable = ampersand = 1, type = characters = '', length = pseudo;
-				break
-			// :
-			case 58:
-				length = 1 + strlen(characters), property = previous;
-			default:
-				if (variable < 1)
-					if (character == 123)
-						--variable;
-					else if (character == 125 && variable++ == 0 && prev() == 125)
-						continue
-
-				switch (characters += from(character), character * variable) {
-					// &
-					case 38:
-						ampersand = offset > 0 ? 1 : (characters += '\f', -1);
-						break
-					// ,
-					case 44:
-						points[index++] = (strlen(characters) - 1) * ampersand, ampersand = 1;
-						break
-					// @
-					case 64:
-						// -
-						if (peek() === 45)
-							characters += delimit(next());
-
-						atrule = peek(), offset = length = strlen(type = characters += identifier(caret())), character++;
-						break
-					// -
-					case 45:
-						if (previous === 45 && strlen(characters) == 2)
-							variable = 0;
-				}
-		}
-
-	return rulesets
-}
-
-/**
- * @param {string} value
- * @param {object} root
- * @param {object?} parent
- * @param {number} index
- * @param {number} offset
- * @param {string[]} rules
- * @param {number[]} points
- * @param {string} type
- * @param {string[]} props
- * @param {string[]} children
- * @param {number} length
- * @param {object[]} siblings
- * @return {object}
- */
-function ruleset (value, root, parent, index, offset, rules, points, type, props, children, length, siblings) {
-	var post = offset - 1;
-	var rule = offset === 0 ? rules : [''];
-	var size = sizeof(rule);
-
-	for (var i = 0, j = 0, k = 0; i < index; ++i)
-		for (var x = 0, y = substr(value, post + 1, post = abs(j = points[i])), z = value; x < size; ++x)
-			if (z = trim(j > 0 ? rule[x] + ' ' + y : replace(y, /&\f/g, rule[x])))
-				props[k++] = z;
-
-	return node(value, root, parent, offset === 0 ? RULESET : type, props, children, length, siblings)
-}
-
-/**
- * @param {number} value
- * @param {object} root
- * @param {object?} parent
- * @param {object[]} siblings
- * @return {object}
- */
-function comment (value, root, parent, siblings) {
-	return node(value, root, parent, COMMENT, from(char()), substr(value, 2, -2), 0, siblings)
-}
-
-/**
- * @param {string} value
- * @param {object} root
- * @param {object?} parent
- * @param {number} length
- * @param {object[]} siblings
- * @return {object}
- */
-function declaration (value, root, parent, length, siblings) {
-	return node(value, root, parent, DECLARATION, substr(value, 0, length), substr(value, length + 1, -1), length, siblings)
-}
-
-/**
- * @param {string} value
- * @param {number} length
- * @param {object[]} children
- * @return {string}
- */
-function prefix (value, length, children) {
-	switch (hash(value, length)) {
-		// color-adjust
-		case 5103:
-			return WEBKIT + 'print-' + value + value
-		// animation, animation-(delay|direction|duration|fill-mode|iteration-count|name|play-state|timing-function)
-		case 5737: case 4201: case 3177: case 3433: case 1641: case 4457: case 2921:
-		// text-decoration, filter, clip-path, backface-visibility, column, box-decoration-break
-		case 5572: case 6356: case 5844: case 3191: case 6645: case 3005:
-		// mask, mask-image, mask-(mode|clip|size), mask-(repeat|origin), mask-position, mask-composite,
-		case 6391: case 5879: case 5623: case 6135: case 4599: case 4855:
-		// background-clip, columns, column-(count|fill|gap|rule|rule-color|rule-style|rule-width|span|width)
-		case 4215: case 6389: case 5109: case 5365: case 5621: case 3829:
-			return WEBKIT + value + value
-		// tab-size
-		case 4789:
-			return MOZ + value + value
-		// appearance, user-select, transform, hyphens, text-size-adjust
-		case 5349: case 4246: case 4810: case 6968: case 2756:
-			return WEBKIT + value + MOZ + value + MS + value + value
-		// writing-mode
-		case 5936:
-			switch (charat(value, length + 11)) {
-				// vertical-l(r)
-				case 114:
-					return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'tb') + value
-				// vertical-r(l)
-				case 108:
-					return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'tb-rl') + value
-				// horizontal(-)tb
-				case 45:
-					return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'lr') + value
-				// default: fallthrough to below
-			}
-		// flex, flex-direction, scroll-snap-type, writing-mode
-		case 6828: case 4268: case 2903:
-			return WEBKIT + value + MS + value + value
-		// order
-		case 6165:
-			return WEBKIT + value + MS + 'flex-' + value + value
-		// align-items
-		case 5187:
-			return WEBKIT + value + replace(value, /(\w+).+(:[^]+)/, WEBKIT + 'box-$1$2' + MS + 'flex-$1$2') + value
-		// align-self
-		case 5443:
-			return WEBKIT + value + MS + 'flex-item-' + replace(value, /flex-|-self/g, '') + (!match(value, /flex-|baseline/) ? MS + 'grid-row-' + replace(value, /flex-|-self/g, '') : '') + value
-		// align-content
-		case 4675:
-			return WEBKIT + value + MS + 'flex-line-pack' + replace(value, /align-content|flex-|-self/g, '') + value
-		// flex-shrink
-		case 5548:
-			return WEBKIT + value + MS + replace(value, 'shrink', 'negative') + value
-		// flex-basis
-		case 5292:
-			return WEBKIT + value + MS + replace(value, 'basis', 'preferred-size') + value
-		// flex-grow
-		case 6060:
-			return WEBKIT + 'box-' + replace(value, '-grow', '') + WEBKIT + value + MS + replace(value, 'grow', 'positive') + value
-		// transition
-		case 4554:
-			return WEBKIT + replace(value, /([^-])(transform)/g, '$1' + WEBKIT + '$2') + value
-		// cursor
-		case 6187:
-			return replace(replace(replace(value, /(zoom-|grab)/, WEBKIT + '$1'), /(image-set)/, WEBKIT + '$1'), value, '') + value
-		// background, background-image
-		case 5495: case 3959:
-			return replace(value, /(image-set\([^]*)/, WEBKIT + '$1' + '$`$1')
-		// justify-content
-		case 4968:
-			return replace(replace(value, /(.+:)(flex-)?(.*)/, WEBKIT + 'box-pack:$3' + MS + 'flex-pack:$3'), /s.+-b[^;]+/, 'justify') + WEBKIT + value + value
-		// justify-self
-		case 4200:
-			if (!match(value, /flex-|baseline/)) return MS + 'grid-column-align' + substr(value, length) + value
-			break
-		// grid-template-(columns|rows)
-		case 2592: case 3360:
-			return MS + replace(value, 'template-', '') + value
-		// grid-(row|column)-start
-		case 4384: case 3616:
-			if (children && children.some(function (element, index) { return length = index, match(element.props, /grid-\w+-end/) })) {
-				return ~indexof(value + (children = children[length].value), 'span', 0) ? value : (MS + replace(value, '-start', '') + value + MS + 'grid-row-span:' + (~indexof(children, 'span', 0) ? match(children, /\d+/) : +match(children, /\d+/) - +match(value, /\d+/)) + ';')
-			}
-			return MS + replace(value, '-start', '') + value
-		// grid-(row|column)-end
-		case 4896: case 4128:
-			return (children && children.some(function (element) { return match(element.props, /grid-\w+-start/) })) ? value : MS + replace(replace(value, '-end', '-span'), 'span ', '') + value
-		// (margin|padding)-inline-(start|end)
-		case 4095: case 3583: case 4068: case 2532:
-			return replace(value, /(.+)-inline(.+)/, WEBKIT + '$1$2') + value
-		// (min|max)?(width|height|inline-size|block-size)
-		case 8116: case 7059: case 5753: case 5535:
-		case 5445: case 5701: case 4933: case 4677:
-		case 5533: case 5789: case 5021: case 4765:
-			// stretch, max-content, min-content, fill-available
-			if (strlen(value) - 1 - length > 6)
-				switch (charat(value, length + 1)) {
-					// (m)ax-content, (m)in-content
-					case 109:
-						// -
-						if (charat(value, length + 4) !== 45)
-							break
-					// (f)ill-available, (f)it-content
-					case 102:
-						return replace(value, /(.+:)(.+)-([^]+)/, '$1' + WEBKIT + '$2-$3' + '$1' + MOZ + (charat(value, length + 3) == 108 ? '$3' : '$2-$3')) + value
-					// (s)tretch
-					case 115:
-						return ~indexof(value, 'stretch', 0) ? prefix(replace(value, 'stretch', 'fill-available'), length, children) + value : value
-				}
-			break
-		// grid-(column|row)
-		case 5152: case 5920:
-			return replace(value, /(.+?):(\d+)(\s*\/\s*(span)?\s*(\d+))?(.*)/, function (_, a, b, c, d, e, f) { return (MS + a + ':' + b + f) + (c ? (MS + a + '-span:' + (d ? e : +e - +b)) + f : '') + value })
-		// position: sticky
-		case 4949:
-			// stick(y)?
-			if (charat(value, length + 6) === 121)
-				return replace(value, ':', ':' + WEBKIT) + value
-			break
-		// display: (flex|inline-flex|grid|inline-grid)
-		case 6444:
-			switch (charat(value, charat(value, 14) === 45 ? 18 : 11)) {
-				// (inline-)?fle(x)
-				case 120:
-					return replace(value, /(.+:)([^;\s!]+)(;|(\s+)?!.+)?/, '$1' + WEBKIT + (charat(value, 14) === 45 ? 'inline-' : '') + 'box$3' + '$1' + WEBKIT + '$2$3' + '$1' + MS + '$2box$3') + value
-				// (inline-)?gri(d)
-				case 100:
-					return replace(value, ':', ':' + MS) + value
-			}
-			break
-		// scroll-margin, scroll-margin-(top|right|bottom|left)
-		case 5719: case 2647: case 2135: case 3927: case 2391:
-			return replace(value, 'scroll-', 'scroll-snap-') + value
-	}
-
-	return value
-}
-
-/**
- * @param {object[]} children
- * @param {function} callback
- * @return {string}
- */
-function serialize (children, callback) {
-	var output = '';
-
-	for (var i = 0; i < children.length; i++)
-		output += callback(children[i], i, children, callback) || '';
-
-	return output
-}
-
-/**
- * @param {object} element
- * @param {number} index
- * @param {object[]} children
- * @param {function} callback
- * @return {string}
- */
-function stringify (element, index, children, callback) {
-	switch (element.type) {
-		case LAYER: if (element.children.length) break
-		case IMPORT: case DECLARATION: return element.return = element.return || element.value
-		case COMMENT: return ''
-		case KEYFRAMES: return element.return = element.value + '{' + serialize(element.children, callback) + '}'
-		case RULESET: if (!strlen(element.value = element.props.join(','))) return ''
-	}
-
-	return strlen(children = serialize(element.children, callback)) ? element.return = element.value + '{' + children + '}' : ''
-}
-
-/**
- * @param {function[]} collection
- * @return {function}
- */
-function middleware (collection) {
-	var length = sizeof(collection);
-
-	return function (element, index, children, callback) {
-		var output = '';
-
-		for (var i = 0; i < length; i++)
-			output += collection[i](element, index, children, callback) || '';
-
-		return output
-	}
-}
-
-/**
- * @param {function} callback
- * @return {function}
- */
-function rulesheet (callback) {
-	return function (element) {
-		if (!element.root)
-			if (element = element.return)
-				callback(element);
-	}
-}
-
-/**
- * @param {object} element
- * @param {number} index
- * @param {object[]} children
- * @param {function} callback
- */
-function prefixer (element, index, children, callback) {
-	if (element.length > -1)
-		if (!element.return)
-			switch (element.type) {
-				case DECLARATION: element.return = prefix(element.value, element.length, children);
-					return
-				case KEYFRAMES:
-					return serialize([copy(element, {value: replace(element.value, '@', '@' + WEBKIT)})], callback)
-				case RULESET:
-					if (element.length)
-						return combine(children = element.props, function (value) {
-							switch (match(value, callback = /(::plac\w+|:read-\w+)/)) {
-								// :read-(only|write)
-								case ':read-only': case ':read-write':
-									lift(copy(element, {props: [replace(value, /:(read-\w+)/, ':' + MOZ + '$1')]}));
-									lift(copy(element, {props: [value]}));
-									assign(element, {props: filter(children, callback)});
-									break
-								// :placeholder
-								case '::placeholder':
-									lift(copy(element, {props: [replace(value, /:(plac\w+)/, ':' + WEBKIT + 'input-$1')]}));
-									lift(copy(element, {props: [replace(value, /:(plac\w+)/, ':' + MOZ + '$1')]}));
-									lift(copy(element, {props: [replace(value, /:(plac\w+)/, MS + 'input-$1')]}));
-									lift(copy(element, {props: [value]}));
-									assign(element, {props: filter(children, callback)});
-									break
-							}
-
-							return ''
-						})
-			}
-}
-
-var unitlessKeys = {
-  animationIterationCount: 1,
-  aspectRatio: 1,
-  borderImageOutset: 1,
-  borderImageSlice: 1,
-  borderImageWidth: 1,
-  boxFlex: 1,
-  boxFlexGroup: 1,
-  boxOrdinalGroup: 1,
-  columnCount: 1,
-  columns: 1,
-  flex: 1,
-  flexGrow: 1,
-  flexPositive: 1,
-  flexShrink: 1,
-  flexNegative: 1,
-  flexOrder: 1,
-  gridRow: 1,
-  gridRowEnd: 1,
-  gridRowSpan: 1,
-  gridRowStart: 1,
-  gridColumn: 1,
-  gridColumnEnd: 1,
-  gridColumnSpan: 1,
-  gridColumnStart: 1,
-  msGridRow: 1,
-  msGridRowSpan: 1,
-  msGridColumn: 1,
-  msGridColumnSpan: 1,
-  fontWeight: 1,
-  lineHeight: 1,
-  opacity: 1,
-  order: 1,
-  orphans: 1,
-  tabSize: 1,
-  widows: 1,
-  zIndex: 1,
-  zoom: 1,
-  WebkitLineClamp: 1,
-  // SVG-related properties
-  fillOpacity: 1,
-  floodOpacity: 1,
-  stopOpacity: 1,
-  strokeDasharray: 1,
-  strokeDashoffset: 1,
-  strokeMiterlimit: 1,
-  strokeOpacity: 1,
-  strokeWidth: 1
-};
-
-var f="undefined"!=typeof process&&void 0!==process.env&&(process.env.REACT_APP_SC_ATTR||process.env.SC_ATTR)||"data-styled",m="active",y="data-styled-version",v="6.1.18",g="/*!sc*/\n",S="undefined"!=typeof window&&"undefined"!=typeof document,w=Boolean("boolean"==typeof SC_DISABLE_SPEEDY?SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env&&void 0!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&""!==process.env.REACT_APP_SC_DISABLE_SPEEDY?"false"!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&process.env.REACT_APP_SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env&&void 0!==process.env.SC_DISABLE_SPEEDY&&""!==process.env.SC_DISABLE_SPEEDY?"false"!==process.env.SC_DISABLE_SPEEDY&&process.env.SC_DISABLE_SPEEDY:"production"!==process.env.NODE_ENV),E=/invalid hook call/i,N=new Set,P=function(t,n){if("production"!==process.env.NODE_ENV){var o=n?' with the id of "'.concat(n,'"'):"",s="The component ".concat(t).concat(o," has been created dynamically.\n")+"You may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.\nSee https://styled-components.com/docs/basics#define-styled-components-outside-of-the-render-method for more info.\n",i=console.error;try{var a=!0;console.error=function(t){for(var n=[],o=1;o<arguments.length;o++)n[o-1]=arguments[o];E.test(t)?(a=!1,N.delete(s)):i.apply(void 0,__spreadArray([t],n,!1));},useRef(),a&&!N.has(s)&&(console.warn(s),N.add(s));}catch(e){E.test(e.message)&&N.delete(s);}finally{console.error=i;}}},_=Object.freeze([]),C=Object.freeze({});function I(e,t,n){return void 0===n&&(n=C),e.theme!==n.theme&&e.theme||t||n.theme}var A=new Set(["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","big","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","small","source","span","strong","style","sub","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","tr","track","u","ul","use","var","video","wbr","circle","clipPath","defs","ellipse","foreignObject","g","image","line","linearGradient","marker","mask","path","pattern","polygon","polyline","radialGradient","rect","stop","svg","text","tspan"]),O=/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,D=/(^-|-$)/g;function R(e){return e.replace(O,"-").replace(D,"")}var T=/(a)(d)/gi,k=52,j=function(e){return String.fromCharCode(e+(e>25?39:97))};function x(e){var t,n="";for(t=Math.abs(e);t>k;t=t/k|0)n=j(t%k)+n;return (j(t%k)+n).replace(T,"$1-$2")}var V,F=5381,z=function(e,t){for(var n=t.length;n;)e=33*e^t.charCodeAt(--n);return e},M=function(e){return z(F,e)};function $(e){return x(M(e)>>>0)}function B(e){return "production"!==process.env.NODE_ENV&&"string"==typeof e&&e||e.displayName||e.name||"Component"}function G(e){return "string"==typeof e&&("production"===process.env.NODE_ENV||e.charAt(0)===e.charAt(0).toLowerCase())}var L="function"==typeof Symbol&&Symbol.for,Y=L?Symbol.for("react.memo"):60115,q=L?Symbol.for("react.forward_ref"):60112,W={childContextTypes:true,contextType:true,contextTypes:true,defaultProps:true,displayName:true,getDefaultProps:true,getDerivedStateFromError:true,getDerivedStateFromProps:true,mixins:true,propTypes:true,type:true},H={name:true,length:true,prototype:true,caller:true,callee:true,arguments:true,arity:true},U={$$typeof:true,compare:true,defaultProps:true,displayName:true,propTypes:true,type:true},J=((V={})[q]={$$typeof:true,render:true,defaultProps:true,displayName:true,propTypes:true},V[Y]=U,V);function X(e){return ("type"in(t=e)&&t.type.$$typeof)===Y?U:"$$typeof"in e?J[e.$$typeof]:W;var t;}var Z=Object.defineProperty,K=Object.getOwnPropertyNames,Q=Object.getOwnPropertySymbols,ee=Object.getOwnPropertyDescriptor,te=Object.getPrototypeOf,ne=Object.prototype;function oe(e,t,n){if("string"!=typeof t){if(ne){var o=te(t);o&&o!==ne&&oe(e,o,n);}var r=K(t);Q&&(r=r.concat(Q(t)));for(var s=X(e),i=X(t),a=0;a<r.length;++a){var c=r[a];if(!(c in H||n&&n[c]||i&&c in i||s&&c in s)){var l=ee(t,c);try{Z(e,c,l);}catch(e){}}}}return e}function re(e){return "function"==typeof e}function se(e){return "object"==typeof e&&"styledComponentId"in e}function ie(e,t){return e&&t?"".concat(e," ").concat(t):e||t||""}function ae(e,t){if(0===e.length)return "";for(var n=e[0],o=1;o<e.length;o++)n+=e[o];return n}function ce(e){return null!==e&&"object"==typeof e&&e.constructor.name===Object.name&&!("props"in e&&e.$$typeof)}function le(e,t,n){if(void 0===n&&(n=false),!n&&!ce(e)&&!Array.isArray(e))return t;if(Array.isArray(t))for(var o=0;o<t.length;o++)e[o]=le(e[o],t[o]);else if(ce(t))for(var o in t)e[o]=le(e[o],t[o]);return e}function ue(e,t){Object.defineProperty(e,"toString",{value:t});}var pe="production"!==process.env.NODE_ENV?{1:"Cannot create styled-component for component: %s.\n\n",2:"Can't collect styles once you've consumed a `ServerStyleSheet`'s styles! `ServerStyleSheet` is a one off instance for each server-side render cycle.\n\n- Are you trying to reuse it across renders?\n- Are you accidentally calling collectStyles twice?\n\n",3:"Streaming SSR is only supported in a Node.js environment; Please do not try to call this method in the browser.\n\n",4:"The `StyleSheetManager` expects a valid target or sheet prop!\n\n- Does this error occur on the client and is your target falsy?\n- Does this error occur on the server and is the sheet falsy?\n\n",5:"The clone method cannot be used on the client!\n\n- Are you running in a client-like environment on the server?\n- Are you trying to run SSR on the client?\n\n",6:"Trying to insert a new style tag, but the given Node is unmounted!\n\n- Are you using a custom target that isn't mounted?\n- Does your document not have a valid head element?\n- Have you accidentally removed a style tag manually?\n\n",7:'ThemeProvider: Please return an object from your "theme" prop function, e.g.\n\n```js\ntheme={() => ({})}\n```\n\n',8:'ThemeProvider: Please make your "theme" prop an object.\n\n',9:"Missing document `<head>`\n\n",10:"Cannot find a StyleSheet instance. Usually this happens if there are multiple copies of styled-components loaded at once. Check out this issue for how to troubleshoot and fix the common cases where this situation can happen: https://github.com/styled-components/styled-components/issues/1941#issuecomment-417862021\n\n",11:"_This error was replaced with a dev-time warning, it will be deleted for v4 final._ [createGlobalStyle] received children which will not be rendered. Please use the component without passing children elements.\n\n",12:"It seems you are interpolating a keyframe declaration (%s) into an untagged string. This was supported in styled-components v3, but is not longer supported in v4 as keyframes are now injected on-demand. Please wrap your string in the css\\`\\` helper which ensures the styles are injected correctly. See https://www.styled-components.com/docs/api#css\n\n",13:"%s is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details.\n\n",14:'ThemeProvider: "theme" prop is required.\n\n',15:"A stylis plugin has been supplied that is not named. We need a name for each plugin to be able to prevent styling collisions between different stylis configurations within the same app. Before you pass your plugin to `<StyleSheetManager stylisPlugins={[]}>`, please make sure each plugin is uniquely-named, e.g.\n\n```js\nObject.defineProperty(importedPlugin, 'name', { value: 'some-unique-name' });\n```\n\n",16:"Reached the limit of how many styled components may be created at group %s.\nYou may only create up to 1,073,741,824 components. If you're creating components dynamically,\nas for instance in your render method then you may be running into this limitation.\n\n",17:"CSSStyleSheet could not be found on HTMLStyleElement.\nHas styled-components' style tag been unmounted or altered by another script?\n",18:"ThemeProvider: Please make sure your useTheme hook is within a `<ThemeProvider>`"}:{};function de(){for(var e=[],t=0;t<arguments.length;t++)e[t]=arguments[t];for(var n=e[0],o=[],r=1,s=e.length;r<s;r+=1)o.push(e[r]);return o.forEach(function(e){n=n.replace(/%[a-z]/,e);}),n}function he(t){for(var n=[],o=1;o<arguments.length;o++)n[o-1]=arguments[o];return "production"===process.env.NODE_ENV?new Error("An error occurred. See https://github.com/styled-components/styled-components/blob/main/packages/styled-components/src/utils/errors.md#".concat(t," for more information.").concat(n.length>0?" Args: ".concat(n.join(", ")):"")):new Error(de.apply(void 0,__spreadArray([pe[t]],n,false)).trim())}var fe=function(){function e(e){this.groupSizes=new Uint32Array(512),this.length=512,this.tag=e;}return e.prototype.indexOfGroup=function(e){for(var t=0,n=0;n<e;n++)t+=this.groupSizes[n];return t},e.prototype.insertRules=function(e,t){if(e>=this.groupSizes.length){for(var n=this.groupSizes,o=n.length,r=o;e>=r;)if((r<<=1)<0)throw he(16,"".concat(e));this.groupSizes=new Uint32Array(r),this.groupSizes.set(n),this.length=r;for(var s=o;s<r;s++)this.groupSizes[s]=0;}for(var i=this.indexOfGroup(e+1),a=(s=0,t.length);s<a;s++)this.tag.insertRule(i,t[s])&&(this.groupSizes[e]++,i++);},e.prototype.clearGroup=function(e){if(e<this.length){var t=this.groupSizes[e],n=this.indexOfGroup(e),o=n+t;this.groupSizes[e]=0;for(var r=n;r<o;r++)this.tag.deleteRule(n);}},e.prototype.getGroup=function(e){var t="";if(e>=this.length||0===this.groupSizes[e])return t;for(var n=this.groupSizes[e],o=this.indexOfGroup(e),r=o+n,s=o;s<r;s++)t+="".concat(this.tag.getRule(s)).concat(g);return t},e}(),me=1<<30,ye=new Map,ve=new Map,ge=1,Se=function(e){if(ye.has(e))return ye.get(e);for(;ve.has(ge);)ge++;var t=ge++;if("production"!==process.env.NODE_ENV&&((0|t)<0||t>me))throw he(16,"".concat(t));return ye.set(e,t),ve.set(t,e),t},we=function(e,t){ge=t+1,ye.set(e,t),ve.set(t,e);},be="style[".concat(f,"][").concat(y,'="').concat(v,'"]'),Ee=new RegExp("^".concat(f,'\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)')),Ne=function(e,t,n){for(var o,r=n.split(","),s=0,i=r.length;s<i;s++)(o=r[s])&&e.registerName(t,o);},Pe=function(e,t){for(var n,o=(null!==(n=t.textContent)&&void 0!==n?n:"").split(g),r=[],s=0,i=o.length;s<i;s++){var a=o[s].trim();if(a){var c=a.match(Ee);if(c){var l=0|parseInt(c[1],10),u=c[2];0!==l&&(we(u,l),Ne(e,u,c[3]),e.getTag().insertRules(l,r)),r.length=0;}else r.push(a);}}},_e=function(e){for(var t=document.querySelectorAll(be),n=0,o=t.length;n<o;n++){var r=t[n];r&&r.getAttribute(f)!==m&&(Pe(e,r),r.parentNode&&r.parentNode.removeChild(r));}};function Ce(){return "undefined"!=typeof __webpack_nonce__?__webpack_nonce__:null}var Ie=function(e){var t=document.head,n=e||t,o=document.createElement("style"),r=function(e){var t=Array.from(e.querySelectorAll("style[".concat(f,"]")));return t[t.length-1]}(n),s=void 0!==r?r.nextSibling:null;o.setAttribute(f,m),o.setAttribute(y,v);var i=Ce();return i&&o.setAttribute("nonce",i),n.insertBefore(o,s),o},Ae=function(){function e(e){this.element=Ie(e),this.element.appendChild(document.createTextNode("")),this.sheet=function(e){if(e.sheet)return e.sheet;for(var t=document.styleSheets,n=0,o=t.length;n<o;n++){var r=t[n];if(r.ownerNode===e)return r}throw he(17)}(this.element),this.length=0;}return e.prototype.insertRule=function(e,t){try{return this.sheet.insertRule(t,e),this.length++,!0}catch(e){return  false}},e.prototype.deleteRule=function(e){this.sheet.deleteRule(e),this.length--;},e.prototype.getRule=function(e){var t=this.sheet.cssRules[e];return t&&t.cssText?t.cssText:""},e}(),Oe=function(){function e(e){this.element=Ie(e),this.nodes=this.element.childNodes,this.length=0;}return e.prototype.insertRule=function(e,t){if(e<=this.length&&e>=0){var n=document.createTextNode(t);return this.element.insertBefore(n,this.nodes[e]||null),this.length++,true}return  false},e.prototype.deleteRule=function(e){this.element.removeChild(this.nodes[e]),this.length--;},e.prototype.getRule=function(e){return e<this.length?this.nodes[e].textContent:""},e}(),De=function(){function e(e){this.rules=[],this.length=0;}return e.prototype.insertRule=function(e,t){return e<=this.length&&(this.rules.splice(e,0,t),this.length++,true)},e.prototype.deleteRule=function(e){this.rules.splice(e,1),this.length--;},e.prototype.getRule=function(e){return e<this.length?this.rules[e]:""},e}(),Re=S,Te={isServer:!S,useCSSOMInjection:!w},ke=function(){function e(e,n,o){ void 0===e&&(e=C),void 0===n&&(n={});var r=this;this.options=__assign(__assign({},Te),e),this.gs=n,this.names=new Map(o),this.server=!!e.isServer,!this.server&&S&&Re&&(Re=false,_e(this)),ue(this,function(){return function(e){for(var t=e.getTag(),n=t.length,o="",r=function(n){var r=function(e){return ve.get(e)}(n);if(void 0===r)return "continue";var s=e.names.get(r),i=t.getGroup(n);if(void 0===s||!s.size||0===i.length)return "continue";var a="".concat(f,".g").concat(n,'[id="').concat(r,'"]'),c="";void 0!==s&&s.forEach(function(e){e.length>0&&(c+="".concat(e,","));}),o+="".concat(i).concat(a,'{content:"').concat(c,'"}').concat(g);},s=0;s<n;s++)r(s);return o}(r)});}return e.registerId=function(e){return Se(e)},e.prototype.rehydrate=function(){!this.server&&S&&_e(this);},e.prototype.reconstructWithOptions=function(n,o){return void 0===o&&(o=true),new e(__assign(__assign({},this.options),n),this.gs,o&&this.names||void 0)},e.prototype.allocateGSInstance=function(e){return this.gs[e]=(this.gs[e]||0)+1},e.prototype.getTag=function(){return this.tag||(this.tag=(e=function(e){var t=e.useCSSOMInjection,n=e.target;return e.isServer?new De(n):t?new Ae(n):new Oe(n)}(this.options),new fe(e)));var e;},e.prototype.hasNameForId=function(e,t){return this.names.has(e)&&this.names.get(e).has(t)},e.prototype.registerName=function(e,t){if(Se(e),this.names.has(e))this.names.get(e).add(t);else {var n=new Set;n.add(t),this.names.set(e,n);}},e.prototype.insertRules=function(e,t,n){this.registerName(e,t),this.getTag().insertRules(Se(e),n);},e.prototype.clearNames=function(e){this.names.has(e)&&this.names.get(e).clear();},e.prototype.clearRules=function(e){this.getTag().clearGroup(Se(e)),this.clearNames(e);},e.prototype.clearTag=function(){this.tag=void 0;},e}(),je=/&/g,xe=/^\s*\/\/.*$/gm;function Ve(e,t){return e.map(function(e){return "rule"===e.type&&(e.value="".concat(t," ").concat(e.value),e.value=e.value.replaceAll(",",",".concat(t," ")),e.props=e.props.map(function(e){return "".concat(t," ").concat(e)})),Array.isArray(e.children)&&"@keyframes"!==e.type&&(e.children=Ve(e.children,t)),e})}function Fe(e){var t,n,o,r=C,s=r.options,i=void 0===s?C:s,a=r.plugins,c=void 0===a?_:a,l=function(e,o,r){return r.startsWith(n)&&r.endsWith(n)&&r.replaceAll(n,"").length>0?".".concat(t):e},u=c.slice();u.push(function(e){e.type===RULESET&&e.value.includes("&")&&(e.props[0]=e.props[0].replace(je,n).replace(o,l));}),i.prefix&&u.push(prefixer),u.push(stringify);var p=function(e,r,s,a){ void 0===r&&(r=""),void 0===s&&(s=""),void 0===a&&(a="&"),t=a,n=r,o=new RegExp("\\".concat(n,"\\b"),"g");var c=e.replace(xe,""),l=compile(s||r?"".concat(s," ").concat(r," { ").concat(c," }"):c);i.namespace&&(l=Ve(l,i.namespace));var p=[];return serialize(l,middleware(u.concat(rulesheet(function(e){return p.push(e)})))),p};return p.hash=c.length?c.reduce(function(e,t){return t.name||he(15),z(e,t.name)},F).toString():"",p}var ze=new ke,Me=Fe(),$e=o.createContext({shouldForwardProp:void 0,styleSheet:ze,stylis:Me});$e.Consumer;o.createContext(void 0);function Le(){return useContext($e)}var qe=function(){function e(e,t){var n=this;this.inject=function(e,t){ void 0===t&&(t=Me);var o=n.name+t.hash;e.hasNameForId(n.id,o)||e.insertRules(n.id,o,t(n.rules,o,"@keyframes"));},this.name=e,this.id="sc-keyframes-".concat(e),this.rules=t,ue(this,function(){throw he(12,String(n.name))});}return e.prototype.getName=function(e){return void 0===e&&(e=Me),this.name+e.hash},e}(),We=function(e){return e>="A"&&e<="Z"};function He(e){for(var t="",n=0;n<e.length;n++){var o=e[n];if(1===n&&"-"===o&&"-"===e[0])return e;We(o)?t+="-"+o.toLowerCase():t+=o;}return t.startsWith("ms-")?"-"+t:t}var Ue=function(e){return null==e||false===e||""===e},Je=function(t){var n,o,r=[];for(var s in t){var i=t[s];t.hasOwnProperty(s)&&!Ue(i)&&(Array.isArray(i)&&i.isCss||re(i)?r.push("".concat(He(s),":"),i,";"):ce(i)?r.push.apply(r,__spreadArray(__spreadArray(["".concat(s," {")],Je(i),false),["}"],false)):r.push("".concat(He(s),": ").concat((n=s,null==(o=i)||"boolean"==typeof o||""===o?"":"number"!=typeof o||0===o||n in unitlessKeys||n.startsWith("--")?String(o).trim():"".concat(o,"px")),";")));}return r};function Xe(e,t,n,o){if(Ue(e))return [];if(se(e))return [".".concat(e.styledComponentId)];if(re(e)){if(!re(s=e)||s.prototype&&s.prototype.isReactComponent||!t)return [e];var r=e(t);return "production"===process.env.NODE_ENV||"object"!=typeof r||Array.isArray(r)||r instanceof qe||ce(r)||null===r||console.error("".concat(B(e)," is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details.")),Xe(r,t,n,o)}var s;return e instanceof qe?n?(e.inject(n,o),[e.getName(o)]):[e]:ce(e)?Je(e):Array.isArray(e)?Array.prototype.concat.apply(_,e.map(function(e){return Xe(e,t,n,o)})):[e.toString()]}function Ze(e){for(var t=0;t<e.length;t+=1){var n=e[t];if(re(n)&&!se(n))return  false}return  true}var Ke=M(v),Qe=function(){function e(e,t,n){this.rules=e,this.staticRulesId="",this.isStatic="production"===process.env.NODE_ENV&&(void 0===n||n.isStatic)&&Ze(e),this.componentId=t,this.baseHash=z(Ke,t),this.baseStyle=n,ke.registerId(t);}return e.prototype.generateAndInjectStyles=function(e,t,n){var o=this.baseStyle?this.baseStyle.generateAndInjectStyles(e,t,n):"";if(this.isStatic&&!n.hash)if(this.staticRulesId&&t.hasNameForId(this.componentId,this.staticRulesId))o=ie(o,this.staticRulesId);else {var r=ae(Xe(this.rules,e,t,n)),s=x(z(this.baseHash,r)>>>0);if(!t.hasNameForId(this.componentId,s)){var i=n(r,".".concat(s),void 0,this.componentId);t.insertRules(this.componentId,s,i);}o=ie(o,s),this.staticRulesId=s;}else {for(var a=z(this.baseHash,n.hash),c="",l=0;l<this.rules.length;l++){var u=this.rules[l];if("string"==typeof u)c+=u,"production"!==process.env.NODE_ENV&&(a=z(a,u));else if(u){var p=ae(Xe(u,e,t,n));a=z(a,p+l),c+=p;}}if(c){var d=x(a>>>0);t.hasNameForId(this.componentId,d)||t.insertRules(this.componentId,d,n(c,".".concat(d),void 0,this.componentId)),o=ie(o,d);}}return o},e}(),et=o.createContext(void 0);et.Consumer;var rt={},st=new Set;function it(e,r,s){var i=se(e),a=e,c=!G(e),p=r.attrs,d=void 0===p?_:p,h=r.componentId,f=void 0===h?function(e,t){var n="string"!=typeof e?"sc":R(e);rt[n]=(rt[n]||0)+1;var o="".concat(n,"-").concat($(v+n+rt[n]));return t?"".concat(t,"-").concat(o):o}(r.displayName,r.parentComponentId):h,m=r.displayName,y=void 0===m?function(e){return G(e)?"styled.".concat(e):"Styled(".concat(B(e),")")}(e):m,g=r.displayName&&r.componentId?"".concat(R(r.displayName),"-").concat(r.componentId):r.componentId||f,S=i&&a.attrs?a.attrs.concat(d).filter(Boolean):d,w=r.shouldForwardProp;if(i&&a.shouldForwardProp){var b=a.shouldForwardProp;if(r.shouldForwardProp){var E=r.shouldForwardProp;w=function(e,t){return b(e,t)&&E(e,t)};}else w=b;}var N=new Qe(s,g,i?a.componentStyle:void 0);function O(e,r){return function(e,r,s){var i=e.attrs,a=e.componentStyle,c=e.defaultProps,p=e.foldedComponentIds,d=e.styledComponentId,h=e.target,f=o.useContext(et),m=Le(),y=e.shouldForwardProp||m.shouldForwardProp;"production"!==process.env.NODE_ENV&&useDebugValue(d);var v=I(r,f,c)||C,g=function(e,n,o){for(var r,s=__assign(__assign({},n),{className:void 0,theme:o}),i=0;i<e.length;i+=1){var a=re(r=e[i])?r(s):r;for(var c in a)s[c]="className"===c?ie(s[c],a[c]):"style"===c?__assign(__assign({},s[c]),a[c]):a[c];}return n.className&&(s.className=ie(s.className,n.className)),s}(i,r,v),S=g.as||h,w={};for(var b in g) void 0===g[b]||"$"===b[0]||"as"===b||"theme"===b&&g.theme===v||("forwardedAs"===b?w.as=g.forwardedAs:y&&!y(b,S)||(w[b]=g[b],y||"development"!==process.env.NODE_ENV||isPropValid(b)||st.has(b)||!A.has(S)||(st.add(b),console.warn('styled-components: it looks like an unknown prop "'.concat(b,'" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)')))));var E=function(e,t){var n=Le(),o=e.generateAndInjectStyles(t,n.styleSheet,n.stylis);return "production"!==process.env.NODE_ENV&&useDebugValue(o),o}(a,g);"production"!==process.env.NODE_ENV&&e.warnTooManyClasses&&e.warnTooManyClasses(E);var N=ie(p,d);return E&&(N+=" "+E),g.className&&(N+=" "+g.className),w[G(S)&&!A.has(S)?"class":"className"]=N,s&&(w.ref=s),createElement(S,w)}(D,e,r)}O.displayName=y;var D=o.forwardRef(O);return D.attrs=S,D.componentStyle=N,D.displayName=y,D.shouldForwardProp=w,D.foldedComponentIds=i?ie(a.foldedComponentIds,a.styledComponentId):"",D.styledComponentId=g,D.target=i?a.target:e,Object.defineProperty(D,"defaultProps",{get:function(){return this._foldedDefaultProps},set:function(e){this._foldedDefaultProps=i?function(e){for(var t=[],n=1;n<arguments.length;n++)t[n-1]=arguments[n];for(var o=0,r=t;o<r.length;o++)le(e,r[o],true);return e}({},a.defaultProps,e):e;}}),"production"!==process.env.NODE_ENV&&(P(y,g),D.warnTooManyClasses=function(e,t){var n={},o=false;return function(r){if(!o&&(n[r]=true,Object.keys(n).length>=200)){var s=t?' with the id of "'.concat(t,'"'):"";console.warn("Over ".concat(200," classes were generated for component ").concat(e).concat(s,".\n")+"Consider using the attrs method, together with a style object for frequently changed styles.\nExample:\n  const Component = styled.div.attrs(props => ({\n    style: {\n      background: props.background,\n    },\n  }))`width: 100%;`\n\n  <Component />"),o=true,n={};}}}(y,g)),ue(D,function(){return ".".concat(D.styledComponentId)}),c&&oe(D,e,{attrs:true,componentStyle:true,displayName:true,foldedComponentIds:true,shouldForwardProp:true,styledComponentId:true,target:true}),D}function at(e,t){for(var n=[e[0]],o=0,r=t.length;o<r;o+=1)n.push(t[o],e[o+1]);return n}var ct=function(e){return Object.assign(e,{isCss:true})};function lt(t){for(var n=[],o=1;o<arguments.length;o++)n[o-1]=arguments[o];if(re(t)||ce(t))return ct(Xe(at(_,__spreadArray([t],n,true))));var r=t;return 0===n.length&&1===r.length&&"string"==typeof r[0]?Xe(r):ct(Xe(at(r,n)))}function ut(n,o,r){if(void 0===r&&(r=C),!o)throw he(1,o);var s=function(t){for(var s=[],i=1;i<arguments.length;i++)s[i-1]=arguments[i];return n(o,r,lt.apply(void 0,__spreadArray([t],s,false)))};return s.attrs=function(e){return ut(n,o,__assign(__assign({},r),{attrs:Array.prototype.concat(r.attrs,e).filter(Boolean)}))},s.withConfig=function(e){return ut(n,o,__assign(__assign({},r),e))},s}var pt=function(e){return ut(it,e)},dt=pt;A.forEach(function(e){dt[e]=pt(e);});"production"!==process.env.NODE_ENV&&"undefined"!=typeof navigator&&"ReactNative"===navigator.product&&console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native");var wt="__sc-".concat(f,"__");"production"!==process.env.NODE_ENV&&"test"!==process.env.NODE_ENV&&"undefined"!=typeof window&&(window[wt]||(window[wt]=0),1===window[wt]&&console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."),window[wt]+=1);
-
-const Container = dt.div `
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 90vh;
-  background-color: #f5f5f5;
-`;
-
-const Page = ({ title, children }) => {
-    return (jsxs(Container, { "data-testid": "page-container", children: [jsx("h1", { children: title }), children] }));
-};
+import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
   var insertAt = ref.insertAt;
 
-  if (typeof document === 'undefined') { return; }
+  if (!css || typeof document === 'undefined') { return; }
 
   var head = document.head || document.getElementsByTagName('head')[0];
   var style = document.createElement('style');
@@ -959,18 +28,690 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".btn {\n  font-family: inherit;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease-in-out;\n  outline: none;\n  border: 2px solid;\n  text-decoration: none;\n  display: inline-block;\n  text-align: center;\n}\n\n/* Variants */\n.btn--primary {\n  background-color: #007bff;\n  color: white;\n  border-color: #007bff;\n}\n\n.btn--primary:hover:not(:disabled) {\n  background-color: #0056b3;\n  border-color: #0056b3;\n}\n\n.btn--secondary {\n  background-color: #6c757d;\n  color: white;\n  border-color: #6c757d;\n}\n\n.btn--secondary:hover:not(:disabled) {\n  background-color: #545b62;\n  border-color: #545b62;\n}\n\n.btn--danger {\n  background-color: #dc3545;\n  color: white;\n  border-color: #dc3545;\n}\n\n.btn--danger:hover:not(:disabled) {\n  background-color: #c82333;\n  border-color: #c82333;\n}\n\n.btn--outline {\n  background-color: transparent;\n  color: #007bff;\n  border-color: #007bff;\n}\n\n.btn--outline:hover:not(:disabled) {\n  background-color: #007bff;\n  color: white;\n}\n\n/* Sizes */\n.btn--small {\n  padding: 0.25rem 0.5rem;\n  font-size: 0.875rem;\n  border-radius: 0.25rem;\n}\n\n.btn--medium {\n  padding: 0.5rem 1rem;\n  font-size: 1rem;\n  border-radius: 0.375rem;\n}\n\n.btn--large {\n  padding: 0.75rem 1.5rem;\n  font-size: 1.125rem;\n  border-radius: 0.5rem;\n}\n\n/* States */\n.btn:disabled {\n  opacity: 0.6;\n  cursor: not-allowed;\n}\n\n.btn:focus {\n  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);\n}\n\n.btn:active:not(:disabled) {\n  transform: translateY(1px);\n}";
-styleInject(css_248z);
+var css_248z$e = ".infinite-btn {\n  font-family: inherit;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease-in-out;\n  outline: none;\n  border: 2px solid;\n  text-decoration: none;\n  display: inline-block;\n  text-align: center;\n}\n\n/* Variants */\n.infinite-btn--primary {\n  background-color: #007bff;\n  color: white;\n  border-color: #007bff;\n}\n\n.infinite-btn--primary:hover:not(:disabled) {\n  background-color: #0056b3;\n  border-color: #0056b3;\n}\n\n.infinite-btn--secondary {\n  background-color: #6c757d;\n  color: white;\n  border-color: #6c757d;\n}\n\n.infinite-btn--secondary:hover:not(:disabled) {\n  background-color: #545b62;\n  border-color: #545b62;\n}\n\n.infinite-btn--danger {\n  background-color: #dc3545;\n  color: white;\n  border-color: #dc3545;\n}\n\n.infinite-btn--danger:hover:not(:disabled) {\n  background-color: #c82333;\n  border-color: #c82333;\n}\n\n.infinite-btn--outline {\n  background-color: transparent;\n  color: #007bff;\n  border-color: #007bff;\n}\n\n.infinite-btn--outline:hover:not(:disabled) {\n  background-color: #007bff;\n  color: white;\n}\n\n/* Sizes */\n.infinite-btn--small {\n  padding: 0.25rem 0.5rem;\n  font-size: 0.875rem;\n  border-radius: 0.25rem;\n}\n\n.infinite-btn--medium {\n  padding: 0.5rem 1rem;\n  font-size: 1rem;\n  border-radius: 0.375rem;\n}\n\n.infinite-btn--large {\n  padding: 0.75rem 1.5rem;\n  font-size: 1.125rem;\n  border-radius: 0.5rem;\n}\n\n/* States */\n.infinite-btn:disabled {\n  opacity: 0.6;\n  cursor: not-allowed;\n}\n\n.infinite-btn:focus {\n  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);\n}\n\n.infinite-btn:active:not(:disabled) {\n  transform: translateY(1px);\n}";
+styleInject(css_248z$e);
 
-const Button = ({ children, variant = 'primary', size = 'medium', disabled = false, onClick, type = 'button', className = '', ...props }) => {
+const Button = ({ children, variant = "primary", size = "medium", disabled = false, onClick, type = "button", className = "", ...props }) => {
     const buttonClasses = [
-        'btn',
-        `btn--${variant}`,
-        `btn--${size}`,
+        "infinite-btn",
+        `infinite-btn--${variant}`,
+        `infinite-btn--${size}`,
         className
-    ].filter(Boolean).join(' ');
+    ].filter(Boolean).join(" ");
     return (jsx("button", { className: buttonClasses, disabled: disabled, onClick: onClick, type: type, "data-testid": "reusable-button", ...props, children: children }));
 };
 
-export { Button, Page };
+var css_248z$d = ".infinite-checkbox-wrapper {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.5rem;\n  cursor: pointer;\n}\n\n.infinite-checkbox {\n  appearance: none;\n  width: 1rem;\n  height: 1rem;\n  border: 2px solid #d1d5db;\n  border-radius: 0.25rem;\n  background-color: #ffffff;\n  cursor: pointer;\n  position: relative;\n  transition: all 0.2s ease-in-out;\n  flex-shrink: 0;\n}\n\n.infinite-checkbox:focus {\n  outline: none;\n  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);\n}\n\n/* Sizes */\n.infinite-checkbox--small {\n  width: 0.875rem;\n  height: 0.875rem;\n  border-radius: 0.2rem;\n}\n\n.infinite-checkbox--medium {\n  width: 1rem;\n  height: 1rem;\n  border-radius: 0.25rem;\n}\n\n.infinite-checkbox--large {\n  width: 1.25rem;\n  height: 1.25rem;\n  border-radius: 0.3rem;\n}\n\n/* Variants - Unchecked States */\n.infinite-checkbox--primary {\n  border-color: #d1d5db;\n}\n\n.infinite-checkbox--secondary {\n  border-color: #9ca3af;\n}\n\n.infinite-checkbox--success {\n  border-color: #10b981;\n}\n\n.infinite-checkbox--danger {\n  border-color: #ef4444;\n}\n\n/* Checked States */\n.infinite-checkbox--primary:checked {\n  background-color: #3b82f6;\n  border-color: #3b82f6;\n}\n\n.infinite-checkbox--secondary:checked {\n  background-color: #6b7280;\n  border-color: #6b7280;\n}\n\n.infinite-checkbox--success:checked {\n  background-color: #10b981;\n  border-color: #10b981;\n}\n\n.infinite-checkbox--danger:checked {\n  background-color: #ef4444;\n  border-color: #ef4444;\n}\n\n/* Checkmark */\n.infinite-checkbox:checked::after {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%) rotate(45deg);\n  width: 0.25rem;\n  height: 0.5rem;\n  border: solid white;\n  border-width: 0 2px 2px 0;\n}\n\n.infinite-checkbox--small:checked::after {\n  width: 0.2rem;\n  height: 0.4rem;\n  border-width: 0 1.5px 1.5px 0;\n}\n\n.infinite-checkbox--large:checked::after {\n  width: 0.3rem;\n  height: 0.6rem;\n  border-width: 0 2.5px 2.5px 0;\n}\n\n/* Indeterminate State */\n.infinite-checkbox--indeterminate {\n  background-color: #3b82f6;\n  border-color: #3b82f6;\n}\n\n.infinite-checkbox--indeterminate::after {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  width: 0.5rem;\n  height: 2px;\n  background-color: white;\n  border-radius: 1px;\n}\n\n.infinite-checkbox--small.infinite-checkbox--indeterminate::after {\n  width: 0.4rem;\n  height: 1.5px;\n}\n\n.infinite-checkbox--large.infinite-checkbox--indeterminate::after {\n  width: 0.6rem;\n  height: 2.5px;\n}\n\n/* Disabled State */\n.infinite-checkbox--disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n.infinite-checkbox--disabled:checked {\n  background-color: #9ca3af;\n  border-color: #9ca3af;\n}\n\n/* Hover States */\n.infinite-checkbox:not(:disabled):hover {\n  border-color: #3b82f6;\n}\n\n.infinite-checkbox--secondary:not(:disabled):hover {\n  border-color: #6b7280;\n}\n\n.infinite-checkbox--success:not(:disabled):hover {\n  border-color: #059669;\n}\n\n.infinite-checkbox--danger:not(:disabled):hover {\n  border-color: #dc2626;\n}\n\n/* Label Styles */\n.infinite-checkbox__label {\n  font-size: 0.875rem;\n  color: #374151;\n  cursor: pointer;\n  user-select: none;\n  line-height: 1.5;\n}\n\n.infinite-checkbox__label--small {\n  font-size: 0.75rem;\n}\n\n.infinite-checkbox__label--medium {\n  font-size: 0.875rem;\n}\n\n.infinite-checkbox__label--large {\n  font-size: 1rem;\n}\n\n.infinite-checkbox__label--disabled {\n  color: #9ca3af;\n  cursor: not-allowed;\n}\n\n.infinite-checkbox__required {\n  color: #ef4444;\n  margin-left: 0.125rem;\n}\n\n/* Wrapper disabled state */\n.infinite-checkbox-wrapper:has(.infinite-checkbox--disabled) {\n  cursor: not-allowed;\n}";
+styleInject(css_248z$d);
+
+const Checkbox = ({ id, name, checked, defaultChecked, disabled = false, indeterminate = false, label, size = "medium", variant = "primary", onChange, onFocus, onBlur, className = "", labelClassName = "", required = false, ...props }) => {
+    const inputRef = useRef(null);
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.indeterminate = indeterminate;
+        }
+    }, [indeterminate]);
+    const checkboxClasses = [
+        "infinite-checkbox",
+        `infinite-checkbox--${size}`,
+        `infinite-checkbox--${variant}`,
+        disabled && "infinite-checkbox--disabled",
+        indeterminate && "infinite-checkbox--indeterminate",
+        className
+    ].filter(Boolean).join(" ");
+    const labelClasses = [
+        "infinite-checkbox__label",
+        `infinite-checkbox__label--${size}`,
+        disabled && "infinite-checkbox__label--disabled",
+        labelClassName
+    ].filter(Boolean).join(" ");
+    const checkboxElement = (jsx("input", { ref: inputRef, type: "checkbox", id: id, name: name, checked: checked, defaultChecked: defaultChecked, disabled: disabled, required: required, onChange: onChange, onFocus: onFocus, onBlur: onBlur, className: checkboxClasses, "data-testid": "checkbox-input", ...props }));
+    if (label) {
+        return (jsxs("div", { className: "infinite-checkbox-wrapper", children: [checkboxElement, jsxs("label", { htmlFor: id, className: labelClasses, children: [label, required && jsx("span", { className: "infinite-checkbox__required", children: "*" })] })] }));
+    }
+    return checkboxElement;
+};
+
+var css_248z$c = ".input-container {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n  width: 100%;\n}\n\n.input__label {\n  font-family: inherit;\n  font-weight: 500;\n  font-size: 0.875rem;\n  color: #374151;\n  margin-bottom: 0.25rem;\n}\n\n.input__required {\n  color: #dc3545;\n  margin-left: 0.125rem;\n}\n\n.input__wrapper {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border: 2px solid;\n  border-radius: 0.375rem;\n  background-color: white;\n  transition: all 0.2s ease-in-out;\n}\n\n.input {\n  width: 100%;\n  font-family: inherit;\n  background: transparent;\n  border: none;\n  outline: none;\n  color: #374151;\n  transition: all 0.2s ease-in-out;\n}\n\n.input::placeholder {\n  color: #9ca3af;\n}\n\n.input__left-icon,\n.input__right-icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: #6b7280;\n  flex-shrink: 0;\n}\n\n.input__prefix,\n.input__suffix {\n  font-family: inherit;\n  color: #6b7280;\n  background-color: #f9fafb;\n  border-right: 1px solid #e5e7eb;\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n}\n\n.input__suffix {\n  border-right: none;\n  border-left: 1px solid #e5e7eb;\n}\n\n.input__helper-text {\n  font-size: 0.75rem;\n  color: #6b7280;\n  margin-top: 0.25rem;\n}\n\n.input__error-text {\n  font-size: 0.75rem;\n  color: #dc3545;\n  margin-top: 0.25rem;\n}\n\n/* Sizes */\n.input-container--small .input {\n  padding: 0.375rem 0.75rem;\n  font-size: 0.875rem;\n}\n\n.input-container--small .input__wrapper {\n  border-radius: 0.25rem;\n}\n\n.input-container--small .input__left-icon,\n.input-container--small .input__right-icon {\n  padding: 0 0.5rem;\n  font-size: 0.875rem;\n}\n\n.input-container--small .input__prefix,\n.input-container--small .input__suffix {\n  padding: 0.375rem 0.75rem;\n  font-size: 0.875rem;\n}\n\n.input-container--medium .input {\n  padding: 0.5rem 1rem;\n  font-size: 1rem;\n}\n\n.input-container--medium .input__wrapper {\n  border-radius: 0.375rem;\n}\n\n.input-container--medium .input__left-icon,\n.input-container--medium .input__right-icon {\n  padding: 0 0.75rem;\n  font-size: 1rem;\n}\n\n.input-container--medium .input__prefix,\n.input-container--medium .input__suffix {\n  padding: 0.5rem 1rem;\n  font-size: 1rem;\n}\n\n.input-container--large .input {\n  padding: 0.75rem 1.25rem;\n  font-size: 1.125rem;\n}\n\n.input-container--large .input__wrapper {\n  border-radius: 0.5rem;\n}\n\n.input-container--large .input__left-icon,\n.input-container--large .input__right-icon {\n  padding: 0 1rem;\n  font-size: 1.125rem;\n}\n\n.input-container--large .input__prefix,\n.input-container--large .input__suffix {\n  padding: 0.75rem 1.25rem;\n  font-size: 1.125rem;\n}\n\n/* Variants - Default */\n.input-container--default .input__wrapper {\n  border-color: #d1d5db;\n  background-color: white;\n}\n\n.input-container--default .input__wrapper:hover:not(.input-container--disabled .input__wrapper) {\n  border-color: #9ca3af;\n}\n\n.input-container--default .input__wrapper:focus-within {\n  border-color: #007bff;\n  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);\n}\n\n/* Variants - Success */\n.input-container--success .input__wrapper {\n  border-color: #28a745;\n}\n\n.input-container--success .input__wrapper:focus-within {\n  border-color: #28a745;\n  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);\n}\n\n/* Variants - Warning */\n.input-container--warning .input__wrapper {\n  border-color: #ffc107;\n}\n\n.input-container--warning .input__wrapper:focus-within {\n  border-color: #ffc107;\n  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);\n}\n\n/* Variants - Error */\n.input-container--error .input__wrapper {\n  border-color: #dc3545;\n}\n\n.input-container--error .input__wrapper:focus-within {\n  border-color: #dc3545;\n  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);\n}\n\n/* States */\n.input-container--disabled .input__wrapper {\n  background-color: #f9fafb;\n  border-color: #e5e7eb;\n  cursor: not-allowed;\n}\n\n.input-container--disabled .input {\n  color: #9ca3af;\n  cursor: not-allowed;\n}\n\n.input-container--disabled .input__label {\n  color: #9ca3af;\n}\n\n.input-container--readonly .input__wrapper {\n  background-color: #f9fafb;\n}\n\n.input-container--readonly .input {\n  cursor: default;\n}\n\n/* Icon adjustments */\n.input-container--with-left-icon .input {\n  padding-left: 0;\n}\n\n.input-container--with-right-icon .input {\n  padding-right: 0;\n}\n\n.input-container--with-prefix .input {\n  padding-left: 0;\n}\n\n.input-container--with-suffix .input {\n  padding-right: 0;\n}";
+styleInject(css_248z$c);
+
+const Input = ({ value, onChange, onBlur, onFocus, onKeyDown, type = "text", placeholder, disabled = false, readOnly = false, required = false, size = "medium", variant = "default", label, helperText, errorText, name, id, className = "", autoComplete, autoFocus = false, maxLength, minLength, pattern, min, max, step, "aria-label": ariaLabel, "aria-describedby": ariaDescribedBy, leftIcon, rightIcon, prefix, suffix, ...props }) => {
+    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const helperTextId = `${inputId}-helper`;
+    const errorTextId = `${inputId}-error`;
+    const handleChange = (event) => {
+        if (!disabled && !readOnly && onChange) {
+            onChange(event.target.value, event);
+        }
+    };
+    const containerClasses = [
+        "input-container",
+        `input-container--${size}`,
+        `input-container--${variant}`,
+        disabled ? "input-container--disabled" : "",
+        readOnly ? "input-container--readonly" : "",
+        leftIcon ? "input-container--with-left-icon" : "",
+        rightIcon ? "input-container--with-right-icon" : "",
+        prefix ? "input-container--with-prefix" : "",
+        suffix ? "input-container--with-suffix" : "",
+        className
+    ].filter(Boolean).join(" ");
+    const inputClasses = [
+        "input",
+        `input--${size}`,
+        `input--${variant}`
+    ].filter(Boolean).join(" ");
+    const describedBy = [
+        ariaDescribedBy,
+        helperText ? helperTextId : null,
+        errorText ? errorTextId : null
+    ].filter(Boolean).join(" ") || undefined;
+    return (jsxs("div", { className: containerClasses, children: [label && (jsxs("label", { htmlFor: inputId, className: "input__label", children: [label, required && jsx("span", { className: "input__required", children: "*" })] })), jsxs("div", { className: "input__wrapper", children: [leftIcon && (jsx("div", { className: "input__left-icon", children: leftIcon })), prefix && (jsx("div", { className: "input__prefix", children: prefix })), jsx("input", { className: inputClasses, type: type, value: value, onChange: handleChange, onBlur: onBlur, onFocus: onFocus, onKeyDown: onKeyDown, placeholder: placeholder, disabled: disabled, readOnly: readOnly, required: required, name: name, id: inputId, autoComplete: autoComplete, autoFocus: autoFocus, maxLength: maxLength, minLength: minLength, pattern: pattern, min: min, max: max, step: step, "aria-label": ariaLabel, "aria-describedby": describedBy, "data-testid": "reusable-input", ...props }), suffix && (jsx("div", { className: "input__suffix", children: suffix })), rightIcon && (jsx("div", { className: "input__right-icon", children: rightIcon }))] }), errorText && (jsx("div", { className: "input__error-text", id: errorTextId, children: errorText })), helperText && !errorText && (jsx("div", { className: "input__helper-text", id: helperTextId, children: helperText }))] }));
+};
+
+var css_248z$b = ".custom-switch {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  cursor: pointer;\n  user-select: none;\n  position: relative;\n}\n\n.custom-switch.disabled {\n  cursor: not-allowed;\n  opacity: 0.6;\n}\n\n.custom-switch-input {\n  position: absolute;\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n\n.custom-switch-slider {\n  position: relative;\n  width: 40px;\n  height: 20px;\n  background-color: #ccc;\n  border-radius: 20px;\n  transition: background-color 0.3s;\n}\n\n.custom-switch-slider::before {\n  content: \"\";\n  position: absolute;\n  left: 2px;\n  top: 2px;\n  width: 16px;\n  height: 16px;\n  background-color: white;\n  border-radius: 50%;\n  transition: transform 0.3s;\n}\n\n.custom-switch-input:checked + .custom-switch-slider {\n  background-color: #4f46e5; /* Indigo */\n}\n\n.custom-switch-input:checked + .custom-switch-slider::before {\n  transform: translateX(20px);\n}\n\n.custom-switch-label {\n  font-size: 14px;\n}\n";
+styleInject(css_248z$b);
+
+const Switch = ({ checked, onChange, disabled = false, label, className = "" }) => {
+    const isControlled = checked !== undefined;
+    const [internalChecked, setInternalChecked] = useState(false);
+    const currentChecked = isControlled ? checked : internalChecked;
+    const handleChange = (event) => {
+        const newChecked = event.target.checked;
+        if (!isControlled)
+            setInternalChecked(newChecked);
+        onChange?.(newChecked, event);
+    };
+    return (jsxs("label", { className: `custom-switch ${disabled ? "disabled" : ""} ${className}`, children: [jsx("input", { type: "checkbox", className: "custom-switch-input", checked: currentChecked, onChange: handleChange, disabled: disabled }), jsx("span", { className: "custom-switch-slider" }), label && jsx("span", { className: "custom-switch-label", children: label })] }));
+};
+
+var css_248z$a = ".infinite-select-container {\n  display: flex;\n  flex-direction: column;\n  gap: 0.375rem;\n}\n\n.infinite-select-wrapper {\n  position: relative;\n}\n\n.infinite-select__native {\n  position: absolute;\n  opacity: 0;\n  pointer-events: none;\n  width: 100%;\n  height: 100%;\n}\n\n.infinite-select {\n  position: relative;\n  min-height: 2.5rem;\n  border: 2px solid #d1d5db;\n  border-radius: 0.375rem;\n  background-color: #ffffff;\n  cursor: pointer;\n  transition: all 0.2s ease-in-out;\n  outline: none;\n}\n\n.infinite-select:focus {\n  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);\n}\n\n/* Sizes */\n.infinite-select--small {\n  min-height: 1rem;\n  border-radius: 0.25rem;\n}\n\n.infinite-select--medium {\n  min-height: 1.5rem;\n  border-radius: 0.375rem;\n}\n\n.infinite-select--large {\n  min-height: 2rem;\n  border-radius: 0.5rem;\n}\n\n/* Variants */\n.infinite-select--primary {\n  border-color: #d1d5db;\n}\n\n.infinite-select--primary:focus,\n.infinite-select--primary.infinite-select--open {\n  border-color: #3b82f6;\n}\n\n.infinite-select--secondary {\n  border-color: #9ca3af;\n}\n\n.infinite-select--secondary:focus,\n.infinite-select--secondary.infinite-select--open {\n  border-color: #6b7280;\n}\n\n.infinite-select--success {\n  border-color: #10b981;\n}\n\n.infinite-select--success:focus,\n.infinite-select--success.infinite-select--open {\n  border-color: #059669;\n}\n\n.infinite-select--danger,\n.infinite-select--error {\n  border-color: #ef4444;\n}\n\n.infinite-select--danger:focus,\n.infinite-select--danger.infinite-select--open,\n.infinite-select--error:focus,\n.infinite-select--error.infinite-select--open {\n  border-color: #dc2626;\n}\n\n/* Disabled state */\n.infinite-select--disabled {\n  background-color: #f9fafb;\n  border-color: #e5e7eb;\n  cursor: not-allowed;\n  opacity: 0.6;\n}\n\n/* Select value container */\n.infinite-select__value {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0.2rem 0.75rem;\n  min-height: inherit;\n}\n\n.infinite-select--small .infinite-select__value {\n  padding: 0.375rem 0.5rem;\n}\n\n.infinite-select--large .infinite-select__value {\n  padding: 0.75rem 1rem;\n}\n\n.infinite-select__placeholder {\n  color: #9ca3af;\n  font-size: 0.875rem;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  flex: 1;\n}\n\n.infinite-select__placeholder--filled {\n  color: #374151;\n}\n\n.infinite-select--small .infinite-select__placeholder {\n  font-size: 0.75rem;\n}\n\n.infinite-select--large .infinite-select__placeholder {\n  font-size: 1rem;\n}\n\n/* Actions container */\n.infinite-select__actions {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  flex-shrink: 0;\n}\n\n.infinite-select__clear {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 1.25rem;\n  height: 1.25rem;\n  border: none;\n  background: none;\n  color: #6b7280;\n  cursor: pointer;\n  border-radius: 0.25rem;\n  font-size: 1rem;\n  line-height: 1;\n  transition: all 0.2s ease-in-out;\n}\n\n.infinite-select__clear:hover {\n  background-color: #f3f4f6;\n  color: #374151;\n}\n\n.infinite-select__spinner {\n  width: 1rem;\n  height: 1rem;\n  border: 2px solid #e5e7eb;\n  border-top: 2px solid #3b82f6;\n  border-radius: 50%;\n  animation: spin 1s linear infinite;\n}\n\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n\n/* .infinite-select__arrow {\n  color: #6b7280;\n  font-size: 0.75rem;\n  transition: transform 0.2s ease-in-out;\n  user-select: none;\n} */\n .infinite-select__arrow {\n  width: 2px;\n  height: 2px;\n  background: transparent;\n  border-left: 4px solid transparent;\n  border-right: 4px solid transparent;\n  border-top: 6px solid #6b7280;\n  border-radius: 2px;\n  transform: rotate(0deg);\n  margin: 5px;\n  font-size: 0.75rem;\n  transition: transform 0.2s ease-in-out;\n  user-select: none;\n  transform-origin: 50% 40%;\n}\n\n.infinite-select__arrow--up {\n  transform: rotate(180deg);\n}\n\n/* Dropdown */\n.infinite-select__dropdown {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  right: 0;\n  z-index: 50;\n  margin-top: 0.25rem;\n  background-color: #ffffff;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);\n  max-height: 16rem;\n  overflow: hidden;\n}\n\n/* Search */\n.infinite-select__search {\n  padding: 0.5rem;\n  border-bottom: 1px solid #e5e7eb;\n}\n\n.infinite-select__search-input {\n  width: 100%;\n  padding: 0.375rem 0.5rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.25rem;\n  font-size: 0.875rem;\n  outline: none;\n}\n\n.infinite-select__search-input:focus {\n  border-color: #3b82f6;\n  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);\n}\n\n/* Options container */\n.infinite-select__options {\n  max-height: 12rem;\n  overflow-y: auto;\n}\n\n.infinite-select__no-options {\n  padding: 0.75rem;\n  text-align: center;\n  color: #6b7280;\n  font-size: 0.875rem;\n}\n\n/* Option groups */\n.infinite-select__group-label {\n  padding: 0.5rem 0.75rem 0.25rem;\n  font-size: 0.75rem;\n  font-weight: 600;\n  color: #6b7280;\n  text-transform: uppercase;\n  letter-spacing: 0.05em;\n  background-color: #f9fafb;\n}\n\n/* Individual options */\n.infinite-select__option {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  padding: 0.5rem 0.75rem;\n  cursor: pointer;\n  transition: background-color 0.15s ease-in-out;\n}\n\n.infinite-select__option:hover {\n  background-color: #f3f4f6;\n}\n\n.infinite-select__option--focused {\n  background-color: #eff6ff;\n}\n\n.infinite-select__option--selected {\n  background-color: #dbeafe;\n  color: #1d4ed8;\n}\n\n.infinite-select__option--disabled {\n  color: #9ca3af;\n  cursor: not-allowed;\n  opacity: 0.6;\n}\n\n.infinite-select__option--disabled:hover {\n  background-color: transparent;\n}\n\n.infinite-select__checkbox {\n  width: 1rem;\n  height: 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.25rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 0.75rem;\n  background-color: #ffffff;\n}\n\n.infinite-select__checkbox--checked {\n  background-color: #3b82f6;\n  border-color: #3b82f6;\n  color: white;\n}\n\n.infinite-select__option-label {\n  font-size: 0.875rem;\n  flex: 1;\n}\n\n/* Label */\n.infinite-select__label {\n  font-size: 0.875rem;\n  font-weight: 500;\n  color: #374151;\n  margin-bottom: 0.25rem;\n}\n\n.infinite-select__label--small {\n  font-size: 0.75rem;\n}\n\n.infinite-select__label--large {\n  font-size: 1rem;\n}\n\n.infinite-select__label--disabled {\n  color: #9ca3af;\n}\n\n.infinite-select__required {\n  color: #ef4444;\n  margin-left: 0.125rem;\n}\n\n/* Helper text */\n.infinite-select__helper {\n  font-size: 0.75rem;\n  color: #6b7280;\n  margin-top: 0.25rem;\n}\n\n.infinite-select__helper--error {\n  color: #ef4444;\n}";
+styleInject(css_248z$a);
+
+const Select = ({ id, name, options, value, defaultValue, placeholder = "Select an option...", disabled = false, required = false, multiple = false, size = "medium", variant = "primary", label, helperText, errorText, searchable = false, clearable = false, loading = false, onChange, onFocus, onBlur, onSearch, className = "", labelClassName = "", ...props }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedValues, setSelectedValues] = useState(multiple
+        ? (Array.isArray(value) ? value : value ? [value] : [])
+        : []);
+    const [focusedIndex, setFocusedIndex] = useState(-1);
+    const selectRef = useRef(null);
+    const searchInputRef = useRef(null);
+    const nativeSelectRef = useRef(null);
+    const filteredOptions = searchable && searchTerm
+        ? options.filter(option => option.label.toLowerCase().includes(searchTerm.toLowerCase()))
+        : options;
+    const groupedOptions = filteredOptions.reduce((groups, option) => {
+        const group = option.group || "";
+        if (!groups[group])
+            groups[group] = [];
+        groups[group].push(option);
+        return groups;
+    }, {});
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (selectRef.current && !selectRef.current.contains(event.target)) {
+                setIsOpen(false);
+                setSearchTerm("");
+                setFocusedIndex(-1);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => { document.removeEventListener("mousedown", handleClickOutside); };
+    }, []);
+    const handleToggle = () => {
+        if (disabled)
+            return;
+        setIsOpen(!isOpen);
+        if (!isOpen && searchable && searchInputRef.current) {
+            setTimeout(() => searchInputRef.current?.focus(), 0);
+        }
+    };
+    const handleOptionSelect = (optionValue) => {
+        if (multiple) {
+            const newValues = selectedValues.includes(optionValue)
+                ? selectedValues.filter(v => v !== optionValue)
+                : [...selectedValues, optionValue];
+            setSelectedValues(newValues);
+            onChange?.(newValues);
+        }
+        else {
+            setSelectedValues([optionValue]);
+            onChange?.(optionValue);
+            setIsOpen(false);
+            setSearchTerm("");
+        }
+        setFocusedIndex(-1);
+    };
+    const handleClear = (e) => {
+        e.stopPropagation();
+        setSelectedValues([]);
+        onChange?.(multiple ? [] : "");
+    };
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        onSearch?.(term);
+        setFocusedIndex(-1);
+    };
+    const handleKeyDown = (e) => {
+        if (disabled)
+            return;
+        switch (e.key) {
+            case "Enter":
+            case " ":
+                if (!isOpen) {
+                    setIsOpen(true);
+                }
+                else if (focusedIndex >= 0 && filteredOptions[focusedIndex]) {
+                    e.preventDefault();
+                    handleOptionSelect(filteredOptions[focusedIndex].value);
+                }
+                break;
+            case "Escape":
+                setIsOpen(false);
+                setSearchTerm("");
+                setFocusedIndex(-1);
+                break;
+            case "ArrowDown":
+                e.preventDefault();
+                if (!isOpen) {
+                    setIsOpen(true);
+                }
+                else {
+                    setFocusedIndex(prev => prev < filteredOptions.length - 1 ? prev + 1 : 0);
+                }
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                if (isOpen) {
+                    setFocusedIndex(prev => prev > 0 ? prev - 1 : filteredOptions.length - 1);
+                }
+                break;
+        }
+    };
+    const getDisplayValue = () => {
+        if (multiple) {
+            if (selectedValues.length === 0)
+                return placeholder;
+            if (selectedValues.length === 1) {
+                const option = options.find(opt => opt.value === selectedValues[0]);
+                return option?.label || selectedValues[0];
+            }
+            return `${selectedValues.length} items selected`;
+        }
+        else {
+            const selectedValue = value || (selectedValues.length > 0 ? selectedValues[0] : "");
+            if (!selectedValue)
+                return placeholder;
+            const option = options.find(opt => opt.value === selectedValue);
+            return option?.label || selectedValue;
+        }
+    };
+    const selectClasses = [
+        "infinite-select",
+        `infinite-select--${size}`,
+        `infinite-select--${variant}`,
+        disabled && "infinite-select--disabled",
+        errorText && "infinite-select--error",
+        isOpen && "infinite-select--open",
+        className
+    ].filter(Boolean).join(" ");
+    const labelClasses = [
+        "infinite-select__label",
+        `infinite-select__label--${size}`,
+        disabled && "infinite-select__label--disabled",
+        labelClassName
+    ].filter(Boolean).join(" ");
+    const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
+    return (jsxs("div", { className: "infinite-select-container", children: [label && (jsxs("label", { htmlFor: selectId, className: labelClasses, children: [label, required && jsx("span", { className: "infinite-select__required", children: "*" })] })), jsxs("div", { className: "infinite-select-wrapper", ref: selectRef, children: [jsxs("select", { ref: nativeSelectRef, id: selectId, name: name, value: multiple ? selectedValues : (value || selectedValues[0] || ""), defaultValue: defaultValue, multiple: multiple, required: required, disabled: disabled, onChange: (e) => {
+                            const target = e.target;
+                            if (multiple) {
+                                const values = Array.from(target.selectedOptions, option => option.value);
+                                setSelectedValues(values);
+                                onChange?.(values, e);
+                            }
+                            else {
+                                setSelectedValues([target.value]);
+                                onChange?.(target.value, e);
+                            }
+                        }, className: "infinite-select__native", tabIndex: -1, "aria-hidden": "true", ...props, children: [!multiple && jsx("option", { value: "", children: placeholder }), options.map(option => (jsx("option", { value: option.value, disabled: option.disabled, children: option.label }, option.value)))] }), jsxs("div", { className: selectClasses, onClick: handleToggle, onKeyDown: handleKeyDown, tabIndex: disabled ? -1 : 0, role: "combobox", "aria-expanded": isOpen, "aria-haspopup": "listbox", "aria-labelledby": label ? `${selectId}-label` : undefined, onFocus: onFocus, onBlur: onBlur, children: [jsxs("div", { className: "infinite-select__value", children: [jsx("span", { className: `infinite-select__placeholder ${selectedValues.length > 0 || value ? "infinite-select__placeholder--filled" : ""}`, children: getDisplayValue() }), jsxs("div", { className: "infinite-select__actions", children: [clearable && (selectedValues.length > 0 || value) && (jsx("button", { type: "button", className: "infinite-select__clear", onClick: handleClear, tabIndex: -1, "aria-label": "Clear selection", children: "\u00D7" })), loading ? (jsx("div", { className: "infinite-select__spinner" })) : (jsx("div", { className: `infinite-select__arrow ${isOpen ? "infinite-select__arrow--up" : ""}` }))] })] }), isOpen && (jsxs("div", { className: "infinite-select__dropdown", children: [searchable && (jsx("div", { className: "infinite-select__search", children: jsx("input", { ref: searchInputRef, type: "text", className: "infinite-select__search-input", placeholder: "Search options...", value: searchTerm, onChange: (e) => { handleSearch(e.target.value); }, onClick: (e) => { e.stopPropagation(); } }) })), jsx("div", { className: "infinite-select__options", role: "listbox", children: filteredOptions.length === 0
+                                            ? (jsx("div", { className: "infinite-select__no-options", children: "No options found" }))
+                                            : (Object.entries(groupedOptions).map(([groupName, groupOptions]) => (jsxs("div", { className: "infinite-select__group", children: [groupName && (jsx("div", { className: "infinite-select__group-label", children: groupName })), groupOptions.map((option) => {
+                                                        const globalIndex = filteredOptions.indexOf(option);
+                                                        const isSelected = multiple
+                                                            ? selectedValues.includes(option.value)
+                                                            : (value || selectedValues[0]) === option.value;
+                                                        const isFocused = focusedIndex === globalIndex;
+                                                        return (jsxs("div", { className: [
+                                                                "infinite-select__option",
+                                                                isSelected && "infinite-select__option--selected",
+                                                                isFocused && "infinite-select__option--focused",
+                                                                option.disabled && "infinite-select__option--disabled"
+                                                            ].filter(Boolean).join(" "), onClick: () => !option.disabled && handleOptionSelect(option.value), role: "option", "aria-selected": isSelected, children: [multiple && (jsx("div", { className: `infinite-select__checkbox ${isSelected ? "infinite-select__checkbox--checked" : ""}`, children: isSelected && "✓" })), jsx("span", { className: "infinite-select__option-label", children: option.label })] }, option.value));
+                                                    })] }, groupName)))) })] }))] })] }), (helperText || errorText) && (jsx("div", { className: `infinite-select__helper ${errorText ? "infinite-select__helper--error" : ""}`, children: errorText || helperText }))] }));
+};
+
+var css_248z$9 = ".infinite-radio-group {\n  display: flex;\n  gap: 0.75rem;\n}\n\n.infinite-radio-group--vertical {\n  flex-direction: column;\n}\n\n.infinite-radio-group--horizontal {\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.infinite-radio-group--disabled {\n  opacity: 0.6;\n}\n\n.infinite-radio-group__label {\n  font-weight: 600;\n  color: #374151;\n  margin-bottom: 0.5rem;\n  font-size: 0.875rem;\n}\n\n.infinite-radio-group__label--small {\n  font-size: 0.75rem;\n  margin-bottom: 0.375rem;\n}\n\n.infinite-radio-group__label--medium {\n  font-size: 0.875rem;\n  margin-bottom: 0.5rem;\n}\n\n.infinite-radio-group__label--large {\n  font-size: 1rem;\n  margin-bottom: 0.625rem;\n}\n\n.infinite-radio-wrapper {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.5rem;\n  cursor: pointer;\n}\n\n.infinite-radio {\n  appearance: none;\n  width: 1rem;\n  height: 1rem;\n  border: 2px solid #d1d5db;\n  border-radius: 50%;\n  background-color: #ffffff;\n  cursor: pointer;\n  position: relative;\n  transition: all 0.2s ease-in-out;\n  flex-shrink: 0;\n}\n\n.infinite-radio:focus {\n  outline: none;\n  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);\n}\n\n/* Sizes */\n.infinite-radio--small {\n  width: 0.875rem;\n  height: 0.875rem;\n}\n\n.infinite-radio--medium {\n  width: 1rem;\n  height: 1rem;\n}\n\n.infinite-radio--large {\n  width: 1.25rem;\n  height: 1.25rem;\n}\n\n/* Variants - Unchecked States */\n.infinite-radio--primary {\n  border-color: #d1d5db;\n}\n\n.infinite-radio--secondary {\n  border-color: #9ca3af;\n}\n\n.infinite-radio--success {\n  border-color: #10b981;\n}\n\n.infinite-radio--danger {\n  border-color: #ef4444;\n}\n\n/* Checked States */\n.infinite-radio--primary:checked {\n  background-color: #ffffff;\n  border-color: #3b82f6;\n}\n\n.infinite-radio--secondary:checked {\n  background-color: #ffffff;\n  border-color: #6b7280;\n}\n\n.infinite-radio--success:checked {\n  background-color: #ffffff;\n  border-color: #10b981;\n}\n\n.infinite-radio--danger:checked {\n  background-color: #ffffff;\n  border-color: #ef4444;\n}\n\n/* Radio dot */\n.infinite-radio:checked::after {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  width: 0.5rem;\n  height: 0.5rem;\n  border-radius: 50%;\n  background-color: #3b82f6;\n}\n\n.infinite-radio--small:checked::after {\n  width: 0.375rem;\n  height: 0.375rem;\n}\n\n.infinite-radio--large:checked::after {\n  width: 0.625rem;\n  height: 0.625rem;\n}\n\n.infinite-radio--secondary:checked::after {\n  background-color: #6b7280;\n}\n\n.infinite-radio--success:checked::after {\n  background-color: #10b981;\n}\n\n.infinite-radio--danger:checked::after {\n  background-color: #ef4444;\n}\n\n/* Disabled State */\n.infinite-radio--disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n.infinite-radio--disabled:checked::after {\n  background-color: #9ca3af;\n}\n\n/* Hover States */\n.infinite-radio:not(:disabled):hover {\n  border-color: #3b82f6;\n}\n\n.infinite-radio--secondary:not(:disabled):hover {\n  border-color: #6b7280;\n}\n\n.infinite-radio--success:not(:disabled):hover {\n  border-color: #059669;\n}\n\n.infinite-radio--danger:not(:disabled):hover {\n  border-color: #dc2626;\n}\n\n/* Label Styles */\n.infinite-radio__label {\n  font-size: 0.875rem;\n  color: #374151;\n  cursor: pointer;\n  user-select: none;\n  line-height: 1.5;\n}\n\n.infinite-radio__label--small {\n  font-size: 0.75rem;\n}\n\n.infinite-radio__label--medium {\n  font-size: 0.875rem;\n}\n\n.infinite-radio__label--large {\n  font-size: 1rem;\n}\n\n.infinite-radio__label--disabled {\n  color: #9ca3af;\n  cursor: not-allowed;\n}\n\n.infinite-radio__required {\n  color: #ef4444;\n  margin-left: 0.125rem;\n}\n\n/* Wrapper disabled state */\n.infinite-radio-wrapper:has(.infinite-radio--disabled) {\n  cursor: not-allowed;\n}";
+styleInject(css_248z$9);
+
+const RadioGroup = ({ name, options, value, defaultValue, disabled = false, size = "medium", variant = "primary", orientation = "vertical", onChange, onFocus, onBlur, className = "", labelClassName = "", groupLabel, required = false, ...props }) => {
+    const handleChange = (event) => {
+        if (onChange) {
+            onChange(event.target.value, event);
+        }
+    };
+    const groupClasses = [
+        "infinite-radio-group",
+        `infinite-radio-group--${orientation}`,
+        disabled && "infinite-radio-group--disabled",
+        className
+    ].filter(Boolean).join(" ");
+    const radioClasses = [
+        "infinite-radio",
+        `infinite-radio--${size}`,
+        `infinite-radio--${variant}`,
+        disabled && "infinite-radio--disabled"
+    ].filter(Boolean).join(" ");
+    const labelClasses = [
+        "infinite-radio__label",
+        `infinite-radio__label--${size}`,
+        disabled && "infinite-radio__label--disabled",
+        labelClassName
+    ].filter(Boolean).join(" ");
+    return (jsxs("div", { className: groupClasses, role: "radiogroup", "aria-labelledby": groupLabel ? `${name}-group-label` : undefined, ...props, children: [groupLabel && (jsxs("div", { id: `${name}-group-label`, className: `infinite-radio-group__label infinite-radio-group__label--${size}`, children: [groupLabel, required && jsx("span", { className: "infinite-radio__required", children: "*" })] })), options.map((option, index) => {
+                const radioId = `${name}-${index}`;
+                const isDisabled = disabled || option.disabled;
+                return (jsxs("div", { className: "infinite-radio-wrapper", children: [jsx("input", { type: "radio", id: radioId, name: name, value: option.value, checked: value ? value === option.value : undefined, defaultChecked: defaultValue ? defaultValue === option.value : undefined, disabled: isDisabled, required: required, onChange: handleChange, onFocus: onFocus, onBlur: onBlur, className: radioClasses, "data-testid": `infinite-radio-${option.value}` }), jsx("label", { htmlFor: radioId, className: [
+                                labelClasses,
+                                isDisabled && "infinite-radio__label--disabled"
+                            ].filter(Boolean).join(" "), children: option.label })] }, option.value));
+            })] }));
+};
+
+var css_248z$8 = "/* Tab.css */\n\n.infinite-tab-container {\n  display: flex;\n  width: 100%;\n}\n\n.infinite-tab-horizontal {\n  flex-direction: column;\n}\n\n.infinite-tab-vertical {\n  flex-direction: row;\n}\n\n.infinite-tab-full-width .infinite-tab-list {\n  width: 100%;\n}\n\n.infinite-tab-disabled {\n  opacity: 0.6;\n  pointer-events: none;\n}\n\n/* Tab List */\n.infinite-tab-list {\n  display: flex;\n  position: relative;\n}\n\n.infinite-tab-list-horizontal {\n  flex-direction: row;\n  border-bottom: 1px solid #e5e7eb;\n}\n\n.infinite-tab-list-vertical {\n  flex-direction: column;\n  border-right: 1px solid #e5e7eb;\n  min-width: 200px;\n}\n\n/* Tab Items */\n.infinite-tab-item {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  padding: 0.75rem 1rem;\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  /* font-weight: 500; */\n  color: #6b7280;\n  transition: all 0.2s ease-in-out;\n  white-space: nowrap;\n  position: relative;\n  text-align: left;\n}\n\n.infinite-tab-item:hover:not(.infinite-tab-item-disabled):not(.infinite-tab-item-active) {\n  color: #374151;\n  background-color: #f9fafb;\n}\n\n.infinite-tab-item:focus {\n  outline: none;\n  box-shadow: 0 0 0 2px #3b82f6;\n  z-index: 1;\n}\n\n.infinite-tab-item-active {\n  color: #3b82f6;\n  /* font-weight: 600; */\n}\n\n.infinite-tab-item-disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n  color: #9ca3af;\n}\n\n.infinite-tab-item-icon {\n  display: flex;\n  align-items: center;\n  font-size: 1em;\n}\n\n.infinite-tab-item-label {\n  flex: 1;\n}\n\n.infinite-tab-item-badge {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-width: 1.25rem;\n  height: 1.25rem;\n  padding: 0 0.375rem;\n  background-color: #ef4444;\n  color: white;\n  border-radius: 0.625rem;\n  font-size: 0.75rem;\n  /* font-weight: 600; */\n  line-height: 1;\n}\n\n/* Sizes */\n.infinite-tab-small .infinite-tab-item {\n  padding: 0.5rem 0.75rem;\n  font-size: 0.875rem;\n  gap: 0.375rem;\n}\n\n.infinite-tab-small .infinite-tab-item-badge {\n  min-width: 1rem;\n  height: 1rem;\n  font-size: 0.6875rem;\n}\n\n.infinite-tab-medium .infinite-tab-item {\n  padding: 0.75rem 1rem;\n  font-size: 0.875rem;\n  gap: 0.5rem;\n}\n\n.infinite-tab-large .infinite-tab-item {\n  padding: 1rem 1.25rem;\n  font-size: 1rem;\n  gap: 0.625rem;\n}\n\n.infinite-tab-large .infinite-tab-item-badge {\n  min-width: 1.5rem;\n  height: 1.5rem;\n  font-size: 0.8125rem;\n}\n\n/* Variants */\n\n/* Default variant - underline style */\n.infinite-tab-default .infinite-tab-item-active {\n  position: relative;\n}\n\n.infinite-tab-default.infinite-tab-horizontal .infinite-tab-item-active::after {\n  content: '';\n  position: absolute;\n  bottom: -1px;\n  left: 0;\n  right: 0;\n  height: 2px;\n  background-color: #3b82f6;\n  border-radius: 1px 1px 0 0;\n}\n\n.infinite-tab-default.infinite-tab-vertical .infinite-tab-item-active::after {\n  content: '';\n  position: absolute;\n  right: -1px;\n  top: 0;\n  bottom: 0;\n  width: 2px;\n  background-color: #3b82f6;\n  border-radius: 0 1px 1px 0;\n}\n\n/* Pills variant */\n.infinite-tab-pills .infinite-tab-list {\n  border: none;\n  padding: 0.25rem;\n  background-color: #f3f4f6;\n  border-radius: 0.5rem;\n  gap: 0.25rem;\n}\n\n.infinite-tab-pills .infinite-tab-item {\n  border-radius: 0.375rem;\n  margin: 0;\n}\n\n.infinite-tab-pills .infinite-tab-item-active {\n  background-color: #ffffff;\n  color: #1f2937;\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);\n}\n\n/* Underline variant */\n.infinite-tab-underline .infinite-tab-list {\n  border-bottom: 2px solid #f3f4f6;\n}\n\n.infinite-tab-underline .infinite-tab-item {\n  border-bottom: 2px solid transparent;\n  margin-bottom: -2px;\n}\n\n.infinite-tab-underline .infinite-tab-item-active {\n  border-bottom-color: #3b82f6;\n}\n\n/* Bordered variant */\n.infinite-tab-bordered .infinite-tab-list {\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem 0.5rem 0 0;\n  background-color: #f9fafb;\n}\n\n.infinite-tab-bordered .infinite-tab-item {\n  border-right: 1px solid #e5e7eb;\n}\n\n.infinite-tab-bordered .infinite-tab-item:last-child {\n  border-right: none;\n}\n\n.infinite-tab-bordered .infinite-tab-item-active {\n  background-color: #ffffff;\n  border-bottom: 1px solid #ffffff;\n  margin-bottom: -1px;\n}\n\n/* Cards variant */\n.infinite-tab-cards .infinite-tab-list {\n  border: none;\n  gap: 0.5rem;\n}\n\n.infinite-tab-cards .infinite-tab-item {\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  background-color: #ffffff;\n}\n\n.infinite-tab-cards .infinite-tab-item:hover:not(.infinite-tab-item-disabled):not(.infinite-tab-item-active) {\n  border-color: #d1d5db;\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);\n}\n\n.infinite-tab-cards .infinite-tab-item-active {\n  border-color: #3b82f6;\n  background-color: #eff6ff;\n  box-shadow: 0 1px 3px 0 rgba(59, 130, 246, 0.1);\n}\n\n/* Tab Content */\n.infinite-tab-content {\n  flex: 1;\n  padding: 1.5rem 0;\n  min-height: 200px;\n}\n\n.infinite-tab-vertical .infinite-tab-content {\n  padding: 0 0 0 1.5rem;\n}\n\n.infinite-tab-small .infinite-tab-content {\n  padding: 1rem 0;\n}\n\n.infinite-tab-large .infinite-tab-content {\n  padding: 2rem 0;\n}\n\n/* Full width tabs */\n.infinite-tab-full-width .infinite-tab-item {\n  flex: 1;\n  justify-content: center;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .infinite-tab-vertical {\n    flex-direction: column;\n  }\n  \n  .infinite-tab-list-vertical {\n    flex-direction: row;\n    border-right: none;\n    border-bottom: 1px solid #e5e7eb;\n    min-width: unset;\n    overflow-x: auto;\n  }\n  \n  .infinite-tab-vertical .infinite-tab-content {\n    padding: 1.5rem 0 0 0;\n  }\n  \n  .infinite-tab-item {\n    padding: 0.625rem 0.875rem;\n    font-size: 0.875rem;\n  }\n}\n\n/* Scrollable tabs for overflow */\n.infinite-tab-list::-webkit-scrollbar {\n  height: 2px;\n}\n\n.infinite-tab-list::-webkit-scrollbar-track {\n  background: transparent;\n}\n\n.infinite-tab-list::-webkit-scrollbar-thumb {\n  background: #d1d5db;\n  border-radius: 1px;\n}\n\n/* High contrast mode */\n@media (prefers-contrast: high) {\n  .infinite-tab-item {\n    border: 1px solid transparent;\n  }\n  \n  .infinite-tab-item-active {\n    border-color: currentColor;\n  }\n}\n\n/* Reduced motion */\n@media (prefers-reduced-motion: reduce) {\n  .infinite-tab-item {\n    transition: none;\n  }\n}";
+styleInject(css_248z$8);
+
+const Tab = ({ tabs, defaultActiveTab, onChange, variant = "default", size = "medium", position = "horizontal", fullWidth = false, disabled = false, className = "", tabsClassName = "", contentClassName = "" }) => {
+    const [activeTab, setActiveTab] = useState(defaultActiveTab || tabs[0]?.key);
+    const handleTabClick = (tabKey) => {
+        if (disabled)
+            return;
+        const tab = tabs.find(t => t.key === tabKey);
+        if (tab?.disabled)
+            return;
+        setActiveTab(tabKey);
+        onChange?.(tabKey);
+    };
+    const activeTabContent = tabs.find(tab => tab.key === activeTab)?.content;
+    return (jsxs("div", { className: `
+        infinite-tab-container 
+        infinite-tab-${variant} 
+        infinite-tab-${size}
+        infinite-tab-${position}
+        ${fullWidth ? "infinite-tab-full-width" : ""}
+        ${disabled ? "infinite-tab-disabled" : ""}
+        ${className}
+      `.trim(), children: [jsx("div", { className: `infinite-tab-list infinite-tab-list-${position} ${tabsClassName}`, role: "tablist", "aria-orientation": position, children: tabs.map((tab) => (jsxs("div", { 
+                    // type="button"
+                    role: "tab", "aria-selected": activeTab === tab.key, "aria-controls": `infinite-tab-panel-${tab.key}`, id: `infinite-tab-${tab.key}`, className: `
+              infinite-tab-item
+              ${activeTab === tab.key ? "infinite-tab-item-active" : ""}
+              ${tab.disabled ? "infinite-tab-item-disabled" : ""}
+            `.trim(), onClick: () => { handleTabClick(tab.key); }, children: [tab.icon && (jsx("span", { className: "infinite-tab-item-icon", children: tab.icon })), jsx("span", { className: "infinite-tab-item-label", children: tab.label }), tab.badge && (jsx("span", { className: "infinite-tab-item-badge", children: tab.badge }))] }, tab.key))) }), jsx("div", { className: `infinite-tab-content ${contentClassName}`, role: "tabpanel", id: `infinite-tab-panel-${activeTab}`, "aria-labelledby": `infinite-tab-${activeTab}`, children: activeTabContent })] }));
+};
+
+var css_248z$7 = ".infinite-tooltip-wrapper {\n  position: relative;\n  display: inline-block;\n  cursor: help;\n}\n\n.infinite-tooltip {\n  visibility: hidden;\n  background-color: #333;\n  color: #fff;\n  text-align: center;\n  border-radius: 6px;\n  padding: 6px 10px;\n  position: absolute;\n  z-index: 1000;\n  white-space: nowrap;\n  font-size: 12px;\n  opacity: 0;\n  transition: opacity 0.3s ease;\n  pointer-events: none;\n}\n\n.infinite-tooltip-wrapper:hover .infinite-tooltip {\n  visibility: visible;\n  opacity: 1;\n}\n\n/* Tooltip Positions */\n.infinite-tooltip--top {\n  bottom: 125%;\n  left: 50%;\n  transform: translateX(-50%);\n}\n\n.infinite-tooltip--bottom {\n  top: 125%;\n  left: 50%;\n  transform: translateX(-50%);\n}\n\n.infinite-tooltip--left {\n  right: 110%;\n  top: 50%;\n  transform: translateY(-50%);\n}\n\n.infinite-tooltip--right {\n  left: 110%;\n  top: 50%;\n  transform: translateY(-50%);\n}\n";
+styleInject(css_248z$7);
+
+const Tooltip = ({ children, text, position = "top", className = "" }) => {
+    const tooltipClasses = [
+        "infinite-tooltip",
+        `infinite-tooltip--${position}`,
+        className
+    ].filter(Boolean).join(" ");
+    return (jsxs("div", { className: "infinite-tooltip-wrapper", children: [children, jsx("span", { className: tooltipClasses, "data-testid": "reusable-tooltip", children: text })] }));
+};
+
+var css_248z$6 = "/* SegmentedControl.css */\n\n.infinite-segmented {\n  display: inline-flex;\n  background-color: #f3f4f6;\n  border-radius: 0.5rem;\n  padding: 0.125rem;\n  position: relative;\n  box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.1);\n  transition: all 0.2s ease-in-out;\n}\n\n.infinite-segmented-full-width {\n  width: 100%;\n}\n\n/* Sizes */\n.infinite-segmented-small {\n  font-size: 0.75rem;\n  line-height: 1rem;\n}\n\n.infinite-segmented-medium {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n\n.infinite-segmented-large {\n  font-size: 1rem;\n  line-height: 1.5rem;\n}\n\n/* Variants */\n.infinite-segmented-default {\n  background-color: #f3f4f6;\n  border: 1px solid #e5e7eb;\n}\n\n.infinite-segmented-outlined {\n  background-color: transparent;\n  border: 2px solid #e5e7eb;\n}\n\n.infinite-segmented-filled {\n  background-color: #1f2937;\n  border: 1px solid #374151;\n}\n\n.infinite-segmented-filled .infinite-segmented-option {\n  color: #d1d5db;\n}\n\n.infinite-segmented-filled .infinite-segmented-option-active {\n  background-color: #374151;\n  color: #ffffff;\n}\n\n/* Options */\n.infinite-segmented-option {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.375rem;\n  flex: 1;\n  padding: 0.5rem 1rem;\n  background-color: transparent;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  font-weight: 500;\n  color: #6b7280;\n  transition: all 0.15s ease-in-out;\n  white-space: nowrap;\n  user-select: none;\n  position: relative;\n  z-index: 1;\n}\n\n.infinite-segmented-small .infinite-segmented-option {\n  padding: 0.375rem 0.75rem;\n  gap: 0.25rem;\n}\n\n.infinite-segmented-large .infinite-segmented-option {\n  padding: 0.75rem 1.25rem;\n  gap: 0.5rem;\n}\n\n.infinite-segmented-option:hover:not(.infinite-segmented-option-disabled):not(.infinite-segmented-option-active) {\n  background-color: rgba(0, 0, 0, 0.05);\n  color: #374151;\n}\n\n.infinite-segmented-option:focus {\n  outline: none;\n  box-shadow: 0 0 0 2px #3b82f6;\n}\n\n.infinite-segmented-option-active {\n  background-color: #ffffff;\n  color: #1f2937;\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);\n  z-index: 2;\n}\n\n.infinite-segmented-option-active:focus {\n  outline: none;\n  box-shadow: none;\n}\n\n.infinite-segmented-option-disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n  color: #9ca3af;\n}\n\n.infinite-segmented-option-icon {\n  display: flex;\n  align-items: center;\n  font-size: 1em;\n}\n\n.infinite-segmented-option-label {\n  font-weight: inherit;\n}\n\n/* Disabled state */\n.infinite-segmented-disabled {\n  opacity: 0.6;\n  pointer-events: none;\n}\n\n/* Outlined variant specific styles */\n.infinite-segmented-outlined .infinite-segmented-option-active {\n  background-color: #3b82f6;\n  color: #ffffff;\n}\n\n.infinite-segmented-outlined .infinite-segmented-option:hover:not(.infinite-segmented-option-disabled):not(.infinite-segmented-option-active) {\n  background-color: #f3f4f6;\n}\n\n/* Animation for active state transition */\n.infinite-segmented-option {\n  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);\n}\n\n/* Responsive adjustments */\n@media (max-width: 640px) {\n  .infinite-segmented-option {\n    padding: 0.5rem 0.75rem;\n  }\n  \n  .infinite-segmented-small .infinite-segmented-option {\n    padding: 0.25rem 0.5rem;\n  }\n  \n  .infinite-segmented-large .infinite-segmented-option {\n    padding: 0.625rem 1rem;\n  }\n}\n\n/* High contrast mode support */\n@media (prefers-contrast: high) {\n  .infinite-segmented {\n    border: 2px solid #000000;\n  }\n  \n  .infinite-segmented-option-active {\n    border: 2px solid #000000;\n  }\n}\n\n/* Reduced motion support */\n@media (prefers-reduced-motion: reduce) {\n  .infinite-segmented,\n  .infinite-segmented-option {\n    transition: none;\n  }\n}";
+styleInject(css_248z$6);
+
+const Segmented = ({ options, defaultValue, onChange, size = "medium", variant = "default", disabled = false, className = "", fullWidth = false }) => {
+    const [selectedValue, setSelectedValue] = useState(defaultValue || options[0]?.value);
+    const handleSelect = (value) => {
+        if (disabled)
+            return;
+        setSelectedValue(value);
+        onChange?.(value);
+    };
+    return (jsx("div", { className: `
+        infinite-segmented 
+        infinite-segmented-${size} 
+        infinite-segmented-${variant}
+        ${fullWidth ? "infinite-segmented-full-width" : ""}
+        ${disabled ? "infinite-segmented-disabled" : ""}
+        ${className}
+      `.trim(), children: options.map((option) => (jsxs("button", { type: "button", className: `
+            infinite-segmented-option
+            ${selectedValue === option.value ? "infinite-segmented-option-active" : ""}
+            ${option.disabled ? "infinite-segmented-option-disabled" : ""}
+          `.trim(), onClick: () => { handleSelect(option.value); }, disabled: disabled || option.disabled, "aria-pressed": selectedValue === option.value, children: [option.icon && (jsx("span", { className: "infinite-segmented-option-icon", children: option.icon })), jsx("span", { className: "infinite-segmented-option-label", children: option.label })] }, option.value))) }));
+};
+
+var css_248z$5 = "/* Base styles */\n.infinite-alert {\n  padding: 10px 18px;\n  border-radius: 8px;\n  font-size: 14px;\n  font-weight: 500;\n  margin: 10px 0;\n  color: #000000;\n  display: inline-block;\n  transition: all 0.3s ease-in-out;\n}\n\n/* Success */\n.infinite-alert-success {\n  background-color: #e7f8eb;\n  border: 1px solid #3ac259;\n}\n\n/* Error */\n.infinite-alert-error {\n  background-color: #ffeceb;\n  border: 1px solid #ff7e74;\n}\n\n/* Warning */\n.infinite-alert-warning {\n  background-color: #fff8e1;\n  border: 1px solid #ffc107;\n}\n\n/* Info */\n.infinite-alert-info {\n  background-color: #e7fcff;\n  border: 1px solid #17a2b8;\n}\n";
+styleInject(css_248z$5);
+
+const Alert = ({ message, type = "info", className = "" }) => {
+    return (jsx("div", { className: `infinite-alert infinite-alert-${type} ${className}`, children: message }));
+};
+
+var css_248z$4 = ".infinite-accordion {\n  border: 1px solid #e2e8f0;\n  border-radius: 8px;\n  overflow: hidden;\n  background: white;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n}\n\n.infinite-accordion-item {\n  border-bottom: 1px solid #e2e8f0;\n}\n\n.infinite-accordion-item:last-child {\n  border-bottom: none;\n}\n.infinite-accordion-header {\n  padding: 16px 20px;\n  background: #f8fafc;\n  border: none;\n  width: 100%;\n  text-align: left;\n  cursor: pointer;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  font-size: 16px;\n  font-weight: 500;\n  color: #374151;\n  transition: all 0.3s ease;\n}\n\n.infinite-accordion-header:hover {\n  background: #f1f5f9;\n}\n\n.infinite-accordion-header:focus {\n  outline: 2px solid #3b82f6;\n  outline-offset: -2px;\n}\n\n.infinite-accordion-icon {\n  transition: transform 0.3s ease;\n  color: #6b7280;\n}\n\n.infinite-accordion-icon.infinite-accordion-icon-open {\n  transform: rotate(180deg);\n}\n\n.infinite-accordion-content {\n  max-height: 0;\n  overflow: hidden;\n  transition: max-height 0.3s ease, opacity 0.3s ease;\n  opacity: 0;\n  will-change: max-height, opacity;\n}\n\n.infinite-accordion-content.infinite-accordion-content-open {\n  max-height: 500px; /* make sure it's big enough */\n  opacity: 1;\n}\n\n.infinite-accordion-body {\n  padding: 20px;\n  color: #4b5563;\n  line-height: 1.6;\n  background: white;\n}\n";
+styleInject(css_248z$4);
+
+const InfiniteAccordionItem = ({ item, isOpen, onToggle }) => {
+    return (jsxs("div", { className: "infinite-accordion-item", children: [jsxs("button", { className: "infinite-accordion-header", onClick: onToggle, role: "button", tabIndex: 0, "aria-expanded": isOpen, "aria-controls": `infinite-accordion-content-${item.id}`, children: [jsx("span", { children: item.title }), jsx("div", { style: { width: "30px", height: "30px" }, className: `infinite-accordion-icon ${isOpen ? "infinite-accordion-icon-open" : ""}`, children: jsxs("svg", { viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg", children: [jsx("g", { id: "SVGRepo_bgCarrier", strokeWidth: "0" }), jsx("g", { id: "SVGRepo_tracerCarrier", strokeLinecap: "round", strokeLinejoin: "round" }), jsxs("g", { id: "SVGRepo_iconCarrier", children: [" ", jsx("path", { d: "M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z", fill: "#0F0F0F" }), " "] })] }) })] }), jsx("div", { id: `infinite-accordion-content-${item.id}`, className: `infinite-accordion-content ${isOpen ? "infinite-accordion-content-open" : ""}`, role: "region", "aria-labelledby": `infinite-accordion-header-${item.id}`, children: jsx("div", { className: "infinite-accordion-body", children: item.content }) })] }));
+};
+// Main Accordion Component
+const InfiniteAccordion = ({ items, allowMultiple = false, className = "" }) => {
+    const [openItems, setOpenItems] = useState(new Set());
+    const toggleItem = (id) => {
+        if (allowMultiple) {
+            setOpenItems(prev => {
+                const newOpenItems = new Set(prev);
+                if (newOpenItems.has(id)) {
+                    newOpenItems.delete(id);
+                }
+                else {
+                    newOpenItems.add(id);
+                }
+                return newOpenItems;
+            });
+        }
+        else {
+            setOpenItems(prev => {
+                return prev.has(id) ? new Set() : new Set([id]);
+            });
+        }
+    };
+    return (jsx("div", { className: `infinite-accordion ${className}`, children: items.map((item) => (jsx(InfiniteAccordionItem, { item: item, isOpen: openItems.has(item.id), onToggle: () => { toggleItem(item.id); } }, item.id))) }));
+};
+
+var css_248z$3 = ".infinite-badge-wrapper {\n  position: relative;\n  display: inline-block;\n}\n\n.infinite-badge {\n  position: absolute;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 0.75rem;\n  border-radius: 9999px;\n  padding: 0.2em 0.5em;\n  background-color: red;\n  color: white;\n  font-weight: bold;\n  height: 1.5em;\n  box-sizing: border-box;\n  white-space: nowrap;\n}\n\n.infinite-badge-number {\n  background-color: red;\n}\n\n.infinite-badge-dot {\n  width: 10px;\n  height: 10px;\n  padding: 0;\n  background-color: red;\n}\n\n.infinite-badge-icon {\n  background-color: #3b82f6; /* blue */\n  padding: 0.25em;\n  font-size: 1em;\n}\n\n.infinite-badge-top-right {\n  top: 0;\n  right: 0;\n  transform: translate(50%, -50%);\n}\n\n.infinite-badge-top-left {\n  top: 0;\n  left: 0;\n  transform: translate(-50%, -50%);\n}\n\n.infinite-badge-bottom-right {\n  bottom: 0;\n  right: 0;\n  transform: translate(50%, 50%);\n}\n\n.infinite-badge-bottom-left {\n  bottom: 0;\n  left: 0;\n  transform: translate(-50%, 50%);\n}\n";
+styleInject(css_248z$3);
+
+const Badge = ({ type = "number", content, position = "top-right", className = "", children }) => {
+    return (jsxs("div", { className: `infinite-badge-wrapper ${className}`, children: [children, jsx("span", { className: `infinite-badge infinite-badge-${type} infinite-badge-${position}`, children: type !== "dot" && content })] }));
+};
+
+var css_248z$2 = ".infinite-slider-container {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  width: 100%;\n  max-width: 300px;\n  margin: 0 auto;\n}\n\n.infinite-slider-label {\n  font-size: 14px;\n  font-weight: 500;\n  color: #333;\n}\n\n.infinite-slider {\n  width: 100%;\n  height: 8px;\n  background: #e0e0e0;\n  border-radius: 4px;\n  outline: none;\n  cursor: pointer;\n  -webkit-appearance: none;\n  appearance: none;\n}\n\n.infinite-slider::-webkit-slider-thumb {\n  -webkit-appearance: none;\n  appearance: none;\n  width: 16px;\n  height: 16px;\n  background: #2563eb;\n  border-radius: 50%;\n  cursor: pointer;\n}\n\n.infinite-slider::-moz-range-thumb {\n  width: 16px;\n  height: 16px;\n  background: #2563eb;\n  border-radius: 50%;\n  cursor: pointer;\n}\n\n.infinite-slider-range {\n  display: flex;\n  justify-content: space-between;\n  font-size: 12px;\n  color: #666;\n}";
+styleInject(css_248z$2);
+
+const Slider = ({ min = 0, max = 100, step = 1, defaultValue = 0, label, className = "", onChange }) => {
+    const [value, setValue] = useState(defaultValue);
+    const handleChange = (e) => {
+        const newValue = Number(e.target.value);
+        setValue(newValue);
+        if (onChange) {
+            onChange(newValue);
+        }
+    };
+    return (jsxs("div", { className: `infinite-slider-container ${className}`, children: [label && (jsxs("label", { className: "infinite-slider-label", children: [label, ": ", value] })), jsx("input", { type: "range", min: min, max: max, step: step, value: value, onChange: handleChange, className: "infinite-slider" }), jsxs("div", { className: "infinite-slider-range", children: [jsx("span", { children: min }), jsx("span", { children: max })] })] }));
+};
+
+var css_248z$1 = ".popover-trigger {\n  display: inline-block;\n  cursor: pointer;\n}\n\n.popover-trigger--disabled {\n  cursor: not-allowed;\n  opacity: 0.6;\n}\n\n.popover-content {\n  position: fixed;\n  border-radius: 0.5rem;\n  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);\n  border: 1px solid;\n  background-color: white;\n  animation: popover-appear 0.2s ease-out;\n  max-width: 320px;\n  word-wrap: break-word;\n}\n\n.popover-inner {\n  padding: 0.75rem 1rem;\n  font-family: inherit;\n  font-size: 0.875rem;\n  line-height: 1.5;\n}\n\n.popover-arrow {\n  position: absolute;\n  width: 0;\n  height: 0;\n  border: 6px solid transparent;\n}\n\n/* Sizes */\n.popover-content--small .popover-inner {\n  padding: 0.5rem 0.75rem;\n  font-size: 0.75rem;\n}\n\n.popover-content--small .popover-arrow {\n  border-width: 4px;\n}\n\n.popover-content--medium .popover-inner {\n  padding: 0.75rem 1rem;\n  font-size: 0.875rem;\n}\n\n.popover-content--medium .popover-arrow {\n  border-width: 6px;\n}\n\n.popover-content--large .popover-inner {\n  padding: 1rem 1.25rem;\n  font-size: 1rem;\n}\n\n.popover-content--large .popover-arrow {\n  border-width: 8px;\n}\n\n/* Variants */\n.popover-content--default {\n  border-color: #e5e7eb;\n  background-color: white;\n  color: #374151;\n}\n\n.popover-content--success {\n  border-color: #10b981;\n  background-color: #ecfdf5;\n  color: #065f46;\n}\n\n.popover-content--warning {\n  border-color: #f59e0b;\n  background-color: #fffbeb;\n  color: #92400e;\n}\n\n.popover-content--error {\n  border-color: #ef4444;\n  background-color: #fef2f2;\n  color: #991b1b;\n}\n\n.popover-content--info {\n  border-color: #3b82f6;\n  background-color: #eff6ff;\n  color: #1e40af;\n}\n\n/* Arrow positioning */\n.popover-content--top .popover-arrow {\n  bottom: -6px;\n  left: 50%;\n  transform: translateX(-50%);\n  border-top-color: #e5e7eb;\n  border-bottom: none;\n}\n\n.popover-content--top-start .popover-arrow {\n  bottom: -6px;\n  left: 1rem;\n  border-top-color: #e5e7eb;\n  border-bottom: none;\n}\n\n.popover-content--top-end .popover-arrow {\n  bottom: -6px;\n  right: 1rem;\n  border-top-color: #e5e7eb;\n  border-bottom: none;\n}\n\n.popover-content--bottom .popover-arrow {\n  top: -6px;\n  left: 50%;\n  transform: translateX(-50%);\n  border-bottom-color: #e5e7eb;\n  border-top: none;\n}\n\n.popover-content--bottom-start .popover-arrow {\n  top: -6px;\n  left: 1rem;\n  border-bottom-color: #e5e7eb;\n  border-top: none;\n}\n\n.popover-content--bottom-end .popover-arrow {\n  top: -6px;\n  right: 1rem;\n  border-bottom-color: #e5e7eb;\n  border-top: none;\n}\n\n.popover-content--left .popover-arrow {\n  right: -6px;\n  top: 50%;\n  transform: translateY(-50%);\n  border-left-color: #e5e7eb;\n  border-right: none;\n}\n\n.popover-content--right .popover-arrow {\n  left: -6px;\n  top: 50%;\n  transform: translateY(-50%);\n  border-right-color: #e5e7eb;\n  border-left: none;\n}\n\n/* Variant arrow colors */\n.popover-content--success .popover-arrow {\n  border-color: #10b981 transparent transparent transparent;\n}\n\n.popover-content--success.popover-content--bottom .popover-arrow {\n  border-color: transparent transparent #10b981 transparent;\n}\n\n.popover-content--success.popover-content--left .popover-arrow {\n  border-color: transparent transparent transparent #10b981;\n}\n\n.popover-content--success.popover-content--right .popover-arrow {\n  border-color: transparent #10b981 transparent transparent;\n}\n\n.popover-content--warning .popover-arrow {\n  border-color: #f59e0b transparent transparent transparent;\n}\n\n.popover-content--warning.popover-content--bottom .popover-arrow {\n  border-color: transparent transparent #f59e0b transparent;\n}\n\n.popover-content--warning.popover-content--left .popover-arrow {\n  border-color: transparent transparent transparent #f59e0b;\n}\n\n.popover-content--warning.popover-content--right .popover-arrow {\n  border-color: transparent #f59e0b transparent transparent;\n}\n\n.popover-content--error .popover-arrow {\n  border-color: #ef4444 transparent transparent transparent;\n}\n\n.popover-content--error.popover-content--bottom .popover-arrow {\n  border-color: transparent transparent #ef4444 transparent;\n}\n\n.popover-content--error.popover-content--left .popover-arrow {\n  border-color: transparent transparent transparent #ef4444;\n}\n\n.popover-content--error.popover-content--right .popover-arrow {\n  border-color: transparent #ef4444 transparent transparent;\n}\n\n.popover-content--info .popover-arrow {\n  border-color: #3b82f6 transparent transparent transparent;\n}\n\n.popover-content--info.popover-content--bottom .popover-arrow {\n  border-color: transparent transparent #3b82f6 transparent;\n}\n\n.popover-content--info.popover-content--left .popover-arrow {\n  border-color: transparent transparent transparent #3b82f6;\n}\n\n.popover-content--info.popover-content--right .popover-arrow {\n  border-color: transparent #3b82f6 transparent transparent;\n}\n\n/* Animation */\n@keyframes popover-appear {\n  from {\n    opacity: 0;\n    transform: scale(0.95);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n";
+styleInject(css_248z$1);
+
+const Popover = ({ children, content, trigger = "click", placement = "bottom", variant = "default", size = "medium", open: controlledOpen, onOpenChange, disabled = false, offset = 8, showArrow = true, closeOnClickOutside = true, closeOnEscape = true, className = "", contentClassName = "", delay = 0, hideDelay = 0, id, ...props }) => {
+    const [internalOpen, setInternalOpen] = useState(false);
+    const [position, setPosition] = useState({ top: 0, left: 0 });
+    const triggerRef = useRef(null);
+    const contentRef = useRef(null);
+    const timeoutRef = useRef();
+    const hideTimeoutRef = useRef();
+    const isControlled = controlledOpen !== undefined;
+    const isOpen = isControlled ? controlledOpen : internalOpen;
+    const popoverId = id || `popover-${Math.random().toString(36).substr(2, 9)}`;
+    const setOpen = useCallback((open) => {
+        if (disabled)
+            return;
+        if (isControlled) {
+            onOpenChange?.(open);
+        }
+        else {
+            setInternalOpen(open);
+        }
+    }, [disabled, isControlled, onOpenChange]);
+    const calculatePosition = useCallback(() => {
+        if (!triggerRef.current || !contentRef.current)
+            return;
+        const triggerRect = triggerRef.current.getBoundingClientRect();
+        const contentRect = contentRef.current.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        let top = 0;
+        let left = 0;
+        switch (placement) {
+            case "top":
+                top = triggerRect.top - contentRect.height - offset;
+                left = triggerRect.left + (triggerRect.width - contentRect.width) / 2;
+                break;
+            case "top-start":
+                top = triggerRect.top - contentRect.height - offset;
+                left = triggerRect.left;
+                break;
+            case "top-end":
+                top = triggerRect.top - contentRect.height - offset;
+                left = triggerRect.right - contentRect.width;
+                break;
+            case "bottom":
+                top = triggerRect.bottom + offset;
+                left = triggerRect.left + (triggerRect.width - contentRect.width) / 2;
+                break;
+            case "bottom-start":
+                top = triggerRect.bottom + offset;
+                left = triggerRect.left;
+                break;
+            case "bottom-end":
+                top = triggerRect.bottom + offset;
+                left = triggerRect.right - contentRect.width;
+                break;
+            case "left":
+                top = triggerRect.top + (triggerRect.height - contentRect.height) / 2;
+                left = triggerRect.left - contentRect.width - offset;
+                break;
+            case "right":
+                top = triggerRect.top + (triggerRect.height - contentRect.height) / 2;
+                left = triggerRect.right + offset;
+                break;
+        }
+        // Boundary detection and adjustment
+        if (left < 0)
+            left = 8;
+        if (left + contentRect.width > viewportWidth)
+            left = viewportWidth - contentRect.width - 8;
+        if (top < 0)
+            top = 8;
+        if (top + contentRect.height > viewportHeight)
+            top = viewportHeight - contentRect.height - 8;
+        setPosition({ top, left });
+    }, [placement, offset]);
+    const handleShow = useCallback(() => {
+        if (hideTimeoutRef.current) {
+            clearTimeout(hideTimeoutRef.current);
+            hideTimeoutRef.current = undefined;
+        }
+        if (delay > 0) {
+            timeoutRef.current = setTimeout(() => { setOpen(true); }, delay);
+        }
+        else {
+            setOpen(true);
+        }
+    }, [delay, setOpen]);
+    const handleHide = useCallback(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = undefined;
+        }
+        if (hideDelay > 0) {
+            hideTimeoutRef.current = setTimeout(() => { setOpen(false); }, hideDelay);
+        }
+        else {
+            setOpen(false);
+        }
+    }, [hideDelay, setOpen]);
+    const handleTriggerClick = () => {
+        if (trigger === "click") {
+            setOpen(!isOpen);
+        }
+    };
+    const handleTriggerMouseEnter = () => {
+        if (trigger === "hover") {
+            handleShow();
+        }
+    };
+    const handleTriggerMouseLeave = () => {
+        if (trigger === "hover") {
+            handleHide();
+        }
+    };
+    const handleTriggerFocus = () => {
+        if (trigger === "focus") {
+            handleShow();
+        }
+    };
+    const handleTriggerBlur = () => {
+        if (trigger === "focus") {
+            handleHide();
+        }
+    };
+    const handleContentMouseEnter = () => {
+        if (trigger === "hover" && hideTimeoutRef.current) {
+            clearTimeout(hideTimeoutRef.current);
+            hideTimeoutRef.current = undefined;
+        }
+    };
+    const handleContentMouseLeave = () => {
+        if (trigger === "hover") {
+            handleHide();
+        }
+    };
+    // Click outside handler
+    useEffect(() => {
+        if (!isOpen || !closeOnClickOutside)
+            return;
+        const handleClickOutside = (event) => {
+            if (triggerRef.current &&
+                contentRef.current &&
+                !triggerRef.current.contains(event.target) &&
+                !contentRef.current.contains(event.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => { document.removeEventListener("mousedown", handleClickOutside); };
+    }, [isOpen, closeOnClickOutside, setOpen]);
+    // Escape key handler
+    useEffect(() => {
+        if (!isOpen || !closeOnEscape)
+            return;
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("keydown", handleEscape);
+        return () => { document.removeEventListener("keydown", handleEscape); };
+    }, [isOpen, closeOnEscape, setOpen]);
+    // Position calculation
+    useEffect(() => {
+        if (isOpen) {
+            calculatePosition();
+            const handleResize = () => { calculatePosition(); };
+            window.addEventListener("resize", handleResize);
+            window.addEventListener("scroll", handleResize);
+            return () => {
+                window.removeEventListener("resize", handleResize);
+                window.removeEventListener("scroll", handleResize);
+            };
+        }
+        return undefined;
+    }, [isOpen, calculatePosition]);
+    // Cleanup timeouts
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current)
+                clearTimeout(timeoutRef.current);
+            if (hideTimeoutRef.current)
+                clearTimeout(hideTimeoutRef.current);
+        };
+    }, []);
+    const triggerClasses = [
+        "popover-trigger",
+        disabled ? "popover-trigger--disabled" : "",
+        className
+    ].filter(Boolean).join(" ");
+    const contentClasses = [
+        "popover-content",
+        `popover-content--${variant}`,
+        `popover-content--${size}`,
+        `popover-content--${placement}`,
+        showArrow ? "popover-content--with-arrow" : "",
+        contentClassName
+    ].filter(Boolean).join(" ");
+    return (jsxs(Fragment, { children: [jsx("div", { ref: triggerRef, className: triggerClasses, onClick: handleTriggerClick, onMouseEnter: handleTriggerMouseEnter, onMouseLeave: handleTriggerMouseLeave, onFocus: handleTriggerFocus, onBlur: handleTriggerBlur, "aria-describedby": isOpen ? popoverId : undefined, ...props, children: children }), isOpen && (jsxs("div", { ref: contentRef, className: contentClasses, style: {
+                    position: "fixed",
+                    top: position.top,
+                    left: position.left,
+                    zIndex: 1000
+                }, id: popoverId, role: "tooltip", onMouseEnter: handleContentMouseEnter, onMouseLeave: handleContentMouseLeave, children: [showArrow && jsx("div", { className: "popover-arrow" }), jsx("div", { className: "popover-inner", children: content })] }))] }));
+};
+
+var css_248z = "/* Modal.css */\n\n.infinite-modal-overlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 1000;\n  padding: 1rem;\n  overflow-y: auto;\n  animation: infinite-modal-fade-in 0.2s ease-out;\n}\n\n.infinite-modal-overlay-centered {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.infinite-modal {\n  background-color: #ffffff;\n  border-radius: 0.75rem;\n  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);\n  width: 100%;\n  max-height: calc(100vh - 2rem);\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  animation: infinite-modal-scale-in 0.2s ease-out;\n}\n\n/* Sizes */\n.infinite-modal-small {\n  max-width: 400px;\n}\n\n.infinite-modal-medium {\n  max-width: 500px;\n}\n\n.infinite-modal-large {\n  max-width: 700px;\n}\n\n.infinite-modal-extra-large {\n  max-width: 900px;\n}\n\n.infinite-modal-fullscreen {\n  max-width: none;\n  max-height: none;\n  width: 100vw;\n  height: 100vh;\n  margin: 0;\n  border-radius: 0;\n}\n\n\n.infinite-modal-centered {\n  margin: auto;\n}\n\n.infinite-modal-drawer {\n  position: fixed;\n  top: 0;\n  right: 0;\n  height: 100vh;\n  max-height: none;\n  border-radius: 0;\n  animation: infinite-modal-slide-in-right 0.3s ease-out;\n}\n\n.infinite-modal-fullscreen {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  max-width: none;\n  max-height: none;\n  border-radius: 0;\n  animation: infinite-modal-fade-in 0.2s ease-out;\n}\n\n/* Header */\n.infinite-modal-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 1.5rem 1.5rem 0 1.5rem;\n  border-bottom: 1px solid transparent;\n  flex-shrink: 0;\n}\n\n.infinite-modal-title {\n  margin: 0;\n  font-size: 1.25rem;\n  font-weight: 600;\n  color: #1f2937;\n  line-height: 1.5;\n}\n\n.infinite-modal-close {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 2rem;\n  height: 2rem;\n  background: none;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  color: #6b7280;\n  transition: all 0.2s ease-in-out;\n  padding: 0;\n  margin-left: 1rem;\n  flex-shrink: 0;\n}\n\n.infinite-modal-close:hover {\n  background-color: #f3f4f6;\n  color: #1f2937;\n}\n\n.infinite-modal-close:focus {\n  outline: none;\n  box-shadow: 0 0 0 2px #3b82f6;\n}\n\n.infinite-modal-close-icon {\n  font-size: 1.5rem;\n  line-height: 1;\n  font-weight: 300;\n}\n\n/* Body */\n.infinite-modal-body {\n  padding: 1.5rem;\n  flex: 1;\n  overflow-y: auto;\n  color: #374151;\n  line-height: 1.6;\n}\n\n/* Footer */\n.infinite-modal-footer {\n  padding: 1rem 1.5rem 1.5rem 1.5rem;\n  border-top: 1px solid #e5e7eb;\n  display: flex;\n  gap: 0.75rem;\n  justify-content: flex-end;\n  flex-shrink: 0;\n  background-color: #f9fafb;\n  border-radius: 0 0 0.75rem 0.75rem;\n}\n\n/* Animations */\n@keyframes infinite-modal-fade-in {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n\n@keyframes infinite-modal-scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.95);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n\n@keyframes infinite-modal-slide-in-right {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0);\n  }\n}\n\n@keyframes infinite-modal-slide-in-left {\n  from {\n    transform: translateX(-100%);\n  }\n  to {\n    transform: translateX(0);\n  }\n}\n\n/* Size-specific adjustments for small screens */\n@media (max-width: 640px) {\n  .infinite-modal-overlay {\n    padding: 0;\n    align-items: flex-end;\n  }\n  \n  .infinite-modal {\n    max-width: none;\n    width: 100%;\n    max-height: 90vh;\n    border-radius: 1rem 1rem 0 0;\n    animation: infinite-modal-slide-up 0.3s ease-out;\n  }\n  \n  .infinite-modal-fullscreen {\n    border-radius: 0;\n    max-height: 100vh;\n  }\n  \n  .infinite-modal-header {\n    padding: 1rem 1rem 0 1rem;\n  }\n  \n  .infinite-modal-body {\n    padding: 1rem;\n  }\n  \n  .infinite-modal-footer {\n    padding: 0.75rem 1rem 1rem 1rem;\n  }\n  \n  .infinite-modal-drawer {\n    width: 100%;\n    height: 100vh;\n    border-radius: 0;\n    animation: infinite-modal-slide-up 0.3s ease-out;\n  }\n}\n\n@keyframes infinite-modal-slide-up {\n  from {\n    transform: translateY(100%);\n  }\n  to {\n    transform: translateY(0);\n  }\n}\n\n/* Drawer variant specific styles */\n.infinite-modal-drawer .infinite-modal-header {\n  border-bottom: 1px solid #e5e7eb;\n  padding-bottom: 1rem;\n}\n\n.infinite-modal-drawer .infinite-modal-footer {\n  background-color: #ffffff;\n  border-top: 1px solid #e5e7eb;\n  border-radius: 0;\n}\n\n/* Scrollbar styling for modal body */\n.infinite-modal-body::-webkit-scrollbar {\n  width: 6px;\n}\n\n.infinite-modal-body::-webkit-scrollbar-track {\n  background: transparent;\n}\n\n.infinite-modal-body::-webkit-scrollbar-thumb {\n  background: #d1d5db;\n  border-radius: 3px;\n}\n\n.infinite-modal-body::-webkit-scrollbar-thumb:hover {\n  background: #9ca3af;\n}\n\n/* Focus trap styling */\n.infinite-modal:focus {\n  outline: none;\n}\n\n/* High contrast mode support */\n@media (prefers-contrast: high) {\n  .infinite-modal {\n    border: 2px solid #000000;\n  }\n  \n  .infinite-modal-header {\n    border-bottom: 2px solid #000000;\n  }\n  \n  .infinite-modal-footer {\n    border-top: 2px solid #000000;\n  }\n}\n\n/* Reduced motion support */\n@media (prefers-reduced-motion: reduce) {\n  .infinite-modal-overlay,\n  .infinite-modal {\n    animation: none;\n  }\n  \n  .infinite-modal-close {\n    transition: none;\n  }\n}\n\n/* Print styles */\n@media print {\n  .infinite-modal-overlay {\n    position: static !important;\n    background: none !important;\n    padding: 0 !important;\n  }\n  \n  .infinite-modal {\n    box-shadow: none !important;\n    border: 1px solid #000000 !important;\n    page-break-inside: avoid;\n  }\n  \n  .infinite-modal-close {\n    display: none !important;\n  }\n}\n\n/* Dark mode support (when parent has dark class) */\n.dark .infinite-modal {\n  background-color: #1f2937;\n  color: #f9fafb;\n}\n\n.dark .infinite-modal-title {\n  color: #f9fafb;\n}\n\n.dark .infinite-modal-body {\n  color: #d1d5db;\n}\n\n.dark .infinite-modal-footer {\n  background-color: #111827;\n  border-top-color: #374151;\n}\n\n.dark .infinite-modal-header {\n  border-bottom-color: #374151;\n}\n\n.dark .infinite-modal-close {\n  color: #9ca3af;\n}\n\n.dark .infinite-modal-close:hover {\n  background-color: #374151;\n  color: #f9fafb;\n}";
+styleInject(css_248z);
+
+const Modal = ({ isOpen = false, onClose, title, children, footer, size = "medium", variant = "default", closeOnOverlayClick = true, closeOnEscape = true, showCloseButton = true, centered = true, fullScreen = false, className = "", overlayClassName = "", contentClassName = "", headerClassName = "", bodyClassName = "", footerClassName = "" }) => {
+    // Handle escape key
+    useEffect(() => {
+        if (!isOpen || !closeOnEscape)
+            return;
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                onClose?.();
+            }
+        };
+        document.addEventListener("keydown", handleEscape);
+        return () => { document.removeEventListener("keydown", handleEscape); };
+    }, [isOpen, closeOnEscape, onClose]);
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        }
+        else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+    if (!isOpen)
+        return null;
+    const handleOverlayClick = (e) => {
+        if (e.target === e.currentTarget && closeOnOverlayClick) {
+            onClose?.();
+        }
+    };
+    return (jsx("div", { className: `
+        infinite-modal-overlay
+        ${centered ? "infinite-modal-overlay-centered" : ""}
+        ${overlayClassName}
+      `.trim(), onClick: handleOverlayClick, role: "dialog", "aria-modal": "true", "aria-labelledby": title ? "infinite-modal-title" : undefined, children: jsxs("div", { className: `
+          infinite-modal
+          infinite-modal-${size}
+          infinite-modal-${variant}
+          ${fullScreen ? "infinite-modal-fullscreen" : ""}
+          ${className}
+        `.trim(), onClick: (e) => { e.stopPropagation(); }, children: [(title || showCloseButton) && (jsxs("div", { className: `infinite-modal-header ${headerClassName}`, children: [title && (jsx("h2", { id: "infinite-modal-title", className: "infinite-modal-title", children: title })), showCloseButton && (jsx("button", { type: "button", className: "infinite-modal-close", onClick: onClose, "aria-label": "Close modal", children: jsx("span", { className: "infinite-modal-close-icon", children: "\u00D7" }) }))] })), jsx("div", { className: `infinite-modal-body ${bodyClassName} ${contentClassName}`, children: children }), footer && (jsx("div", { className: `infinite-modal-footer ${footerClassName}`, children: footer }))] }) }));
+};
+
+export { InfiniteAccordion as Accordion, Alert, Badge, Button, Checkbox, Input, Modal, Popover, RadioGroup, Segmented, Select, Slider, Switch, Tab, Tooltip };
 //# sourceMappingURL=index.js.map

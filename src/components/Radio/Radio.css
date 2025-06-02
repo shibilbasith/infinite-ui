@@ -1,0 +1,216 @@
+.infinite-radio-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.infinite-radio-group--vertical {
+  flex-direction: column;
+}
+
+.infinite-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.infinite-radio-group--disabled {
+  opacity: 0.6;
+}
+
+.infinite-radio-group__label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.infinite-radio-group__label--small {
+  font-size: 0.75rem;
+  margin-bottom: 0.375rem;
+}
+
+.infinite-radio-group__label--medium {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.infinite-radio-group__label--large {
+  font-size: 1rem;
+  margin-bottom: 0.625rem;
+}
+
+.infinite-radio-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.infinite-radio {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  background-color: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+.infinite-radio:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Sizes */
+.infinite-radio--small {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.infinite-radio--medium {
+  width: 1rem;
+  height: 1rem;
+}
+
+.infinite-radio--large {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Variants - Unchecked States */
+.infinite-radio--primary {
+  border-color: #d1d5db;
+}
+
+.infinite-radio--secondary {
+  border-color: #9ca3af;
+}
+
+.infinite-radio--success {
+  border-color: #10b981;
+}
+
+.infinite-radio--danger {
+  border-color: #ef4444;
+}
+
+/* Checked States */
+.infinite-radio--primary:checked {
+  background-color: #ffffff;
+  border-color: #3b82f6;
+}
+
+.infinite-radio--secondary:checked {
+  background-color: #ffffff;
+  border-color: #6b7280;
+}
+
+.infinite-radio--success:checked {
+  background-color: #ffffff;
+  border-color: #10b981;
+}
+
+.infinite-radio--danger:checked {
+  background-color: #ffffff;
+  border-color: #ef4444;
+}
+
+/* Radio dot */
+.infinite-radio:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #3b82f6;
+}
+
+.infinite-radio--small:checked::after {
+  width: 0.375rem;
+  height: 0.375rem;
+}
+
+.infinite-radio--large:checked::after {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.infinite-radio--secondary:checked::after {
+  background-color: #6b7280;
+}
+
+.infinite-radio--success:checked::after {
+  background-color: #10b981;
+}
+
+.infinite-radio--danger:checked::after {
+  background-color: #ef4444;
+}
+
+/* Disabled State */
+.infinite-radio--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.infinite-radio--disabled:checked::after {
+  background-color: #9ca3af;
+}
+
+/* Hover States */
+.infinite-radio:not(:disabled):hover {
+  border-color: #3b82f6;
+}
+
+.infinite-radio--secondary:not(:disabled):hover {
+  border-color: #6b7280;
+}
+
+.infinite-radio--success:not(:disabled):hover {
+  border-color: #059669;
+}
+
+.infinite-radio--danger:not(:disabled):hover {
+  border-color: #dc2626;
+}
+
+/* Label Styles */
+.infinite-radio__label {
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.infinite-radio__label--small {
+  font-size: 0.75rem;
+}
+
+.infinite-radio__label--medium {
+  font-size: 0.875rem;
+}
+
+.infinite-radio__label--large {
+  font-size: 1rem;
+}
+
+.infinite-radio__label--disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.infinite-radio__required {
+  color: #ef4444;
+  margin-left: 0.125rem;
+}
+
+/* Wrapper disabled state */
+.infinite-radio-wrapper:has(.infinite-radio--disabled) {
+  cursor: not-allowed;
+}

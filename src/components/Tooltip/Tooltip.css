@@ -1,0 +1,51 @@
+.infinite-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.infinite-tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px 10px;
+  position: absolute;
+  z-index: 1000;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.infinite-tooltip-wrapper:hover .infinite-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip Positions */
+.infinite-tooltip--top {
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.infinite-tooltip--bottom {
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.infinite-tooltip--left {
+  right: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.infinite-tooltip--right {
+  left: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+}

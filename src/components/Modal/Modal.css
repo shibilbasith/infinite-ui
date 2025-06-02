@@ -1,0 +1,358 @@
+/* Modal.css */
+
+.infinite-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: infinite-modal-fade-in 0.2s ease-out;
+}
+
+.infinite-modal-overlay-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infinite-modal {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: infinite-modal-scale-in 0.2s ease-out;
+}
+
+/* Sizes */
+.infinite-modal-small {
+  max-width: 400px;
+}
+
+.infinite-modal-medium {
+  max-width: 500px;
+}
+
+.infinite-modal-large {
+  max-width: 700px;
+}
+
+.infinite-modal-extra-large {
+  max-width: 900px;
+}
+
+.infinite-modal-fullscreen {
+  max-width: none;
+  max-height: none;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+}
+
+
+.infinite-modal-centered {
+  margin: auto;
+}
+
+.infinite-modal-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  max-height: none;
+  border-radius: 0;
+  animation: infinite-modal-slide-in-right 0.3s ease-out;
+}
+
+.infinite-modal-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+  animation: infinite-modal-fade-in 0.2s ease-out;
+}
+
+/* Header */
+.infinite-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  border-bottom: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.infinite-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+.infinite-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.infinite-modal-close:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.infinite-modal-close:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.infinite-modal-close-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 300;
+}
+
+/* Body */
+.infinite-modal-body {
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* Footer */
+.infinite-modal-footer {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  background-color: #f9fafb;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+/* Animations */
+@keyframes infinite-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes infinite-modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes infinite-modal-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes infinite-modal-slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Size-specific adjustments for small screens */
+@media (max-width: 640px) {
+  .infinite-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  
+  .infinite-modal {
+    max-width: none;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 1rem 1rem 0 0;
+    animation: infinite-modal-slide-up 0.3s ease-out;
+  }
+  
+  .infinite-modal-fullscreen {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+  
+  .infinite-modal-header {
+    padding: 1rem 1rem 0 1rem;
+  }
+  
+  .infinite-modal-body {
+    padding: 1rem;
+  }
+  
+  .infinite-modal-footer {
+    padding: 0.75rem 1rem 1rem 1rem;
+  }
+  
+  .infinite-modal-drawer {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    animation: infinite-modal-slide-up 0.3s ease-out;
+  }
+}
+
+@keyframes infinite-modal-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Drawer variant specific styles */
+.infinite-modal-drawer .infinite-modal-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.infinite-modal-drawer .infinite-modal-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0;
+}
+
+/* Scrollbar styling for modal body */
+.infinite-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.infinite-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.infinite-modal-body::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.infinite-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Focus trap styling */
+.infinite-modal:focus {
+  outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .infinite-modal {
+    border: 2px solid #000000;
+  }
+  
+  .infinite-modal-header {
+    border-bottom: 2px solid #000000;
+  }
+  
+  .infinite-modal-footer {
+    border-top: 2px solid #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .infinite-modal-overlay,
+  .infinite-modal {
+    animation: none;
+  }
+  
+  .infinite-modal-close {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .infinite-modal-overlay {
+    position: static !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+  
+  .infinite-modal {
+    box-shadow: none !important;
+    border: 1px solid #000000 !important;
+    page-break-inside: avoid;
+  }
+  
+  .infinite-modal-close {
+    display: none !important;
+  }
+}
+
+/* Dark mode support (when parent has dark class) */
+.dark .infinite-modal {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark .infinite-modal-title {
+  color: #f9fafb;
+}
+
+.dark .infinite-modal-body {
+  color: #d1d5db;
+}
+
+.dark .infinite-modal-footer {
+  background-color: #111827;
+  border-top-color: #374151;
+}
+
+.dark .infinite-modal-header {
+  border-bottom-color: #374151;
+}
+
+.dark .infinite-modal-close {
+  color: #9ca3af;
+}
+
+.dark .infinite-modal-close:hover {
+  background-color: #374151;
+  color: #f9fafb;
+}

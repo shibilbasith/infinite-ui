@@ -1,0 +1,34 @@
+export interface InputProps {
+    value?: string;
+    onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    type?: "text" | "email" | "password" | "number" | "tel" | "url" | "search";
+    placeholder?: string;
+    disabled?: boolean;
+    readOnly?: boolean;
+    required?: boolean;
+    size?: "small" | "medium" | "large";
+    variant?: "default" | "success" | "warning" | "error";
+    label?: string;
+    helperText?: string;
+    errorText?: string;
+    name?: string;
+    id?: string;
+    className?: string;
+    autoComplete?: string;
+    autoFocus?: boolean;
+    maxLength?: number;
+    minLength?: number;
+    pattern?: string;
+    min?: string | number;
+    max?: string | number;
+    step?: string | number;
+    "aria-label"?: string;
+    "aria-describedby"?: string;
+    leftIcon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
+    prefix?: string;
+    suffix?: string;
+}
